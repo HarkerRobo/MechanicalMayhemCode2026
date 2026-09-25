@@ -147,6 +147,9 @@ public class Arm extends SubsystemBase {
     {
     }
 
+    public TalonFX getMasterMotor() {
+        return master;
+    }
 
     /**
      * Returns true if the subsystem is running in simulation.

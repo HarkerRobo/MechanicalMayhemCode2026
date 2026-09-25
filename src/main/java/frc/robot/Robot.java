@@ -4,9 +4,19 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.sim.*;
+
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import edu.wpi.first.units.measure.*;
+import static edu.wpi.first.units.Units.*;
+
+import frc.robot.subsystems.*;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -18,6 +28,7 @@ public class Robot extends TimedRobot {
 
     public final RobotContainer robotContainer;
     public static Robot instance;
+    private final DCMotorSim armMotorSim;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -28,6 +39,13 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
         instance = this;
+
+        armMotorSim = new DCMotorSim(
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getKrakenX60Foc(1), 0.001, Constants.Arm.GEAR_RATIO
+            ),
+            DCMotor.getKrakenX60Foc(1)
+        );    
     }
 
     /**
@@ -95,9 +113,38 @@ public class Robot extends TimedRobot {
 
     /** This function is called once when the robot is first started up. */
     @Override
-    public void simulationInit() {}
+    public void simulationInit() {
+        var talonFXSim = Arm.getInstance().getMasterMotor().getSimState();
+        talonFXSim.Orientation = ChassisReference.CounterClockwise_Positive;
+        talonFXSim.setMotorType(TalonFXSimState.MotorType.KrakenX60);
+    }
 
     /** This function is called periodically whilst in simulation. */
     @Override
-    public void simulationPeriodic() {}
+    public void simulationPeriodic() {
+
+         var talonFXSim = Arm.getInstance().getMasterMotor().getSimState();
+
+        // set the supply voltage of the TalonFX
+        talonFXSim.setSupplyVoltage(Arm.getInstance().getVoltage());
+
+        // get the motor voltage of the TalonFX
+        var motorVoltage = talonFXSim.getMotorVoltageMeasure();
+
+        // use the motor voltage to calculate new position and velocity
+        // using WPILib's DCMotorSim class for physics simulation
+        armMotorSim.setInputVoltage(motorVoltage.in(Volts));
+        armMotorSim.update(0.020); // assume 20 ms loop time
+
+        // apply the new rotor position and velocity to the TalonFX;
+        // note that this is rotor position/velocity (before gear ratio), but
+        // DCMotorSim returns mechanism position/velocity (after gear ratio)
+        talonFXSim.setRawRotorPosition(armMotorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO));
+        talonFXSim.setRotorVelocity(armMotorSim.getAngularVelocity().times(Constants.Arm.GEAR_RATIO));
+
+        // To retrieve position & Velocity data:
+        // armMotorSim.getAngularPosition();
+        // armMotorSim.getAngularVelocity();
+        // TODO: Telemetry
+    }
 }
