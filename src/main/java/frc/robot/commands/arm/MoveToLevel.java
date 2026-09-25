@@ -8,12 +8,13 @@ import frc.robot.Constants.*;
 import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
 
-public class ArmUp extends Command
+public class MoveToLevel extends Command
 {
-
-    public ArmUp()
+    private double target;
+    public MoveToLevel(double target)
     {
         addRequirements(Arm.getInstance());
+        this.target = target;
     }
 
     @Override
@@ -23,14 +24,12 @@ public class ArmUp extends Command
     }
 
     @Override
-    public void execute()
-    {
-        Arm.getInstance().MoveToAngle(Arm.getInstance().getCurrentAngle().in(Degrees) + (Constants.Arm.ARM_CHANGE_ANGLE).in(Degrees));
+    public void execute() {
+        Arm.getInstance().MoveToAngle(this.target);
     }
-    
+
     @Override
     public boolean isFinished() {
-        return false;
+        return Arm.getInstance().isStalling();
     }
-    
 }

@@ -13,6 +13,7 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 public class Arm extends SubsystemBase {
@@ -21,6 +22,9 @@ public class Arm extends SubsystemBase {
 
     private TalonFX master;
     private TalonFX follower;
+
+    private static Angle currentAngle;
+    private static Angle desiredAngle;
 
     private Arm ()
     {
@@ -123,8 +127,16 @@ public class Arm extends SubsystemBase {
      */
     public void MoveToAngle(double angle)
     {
-        this.desiredPosition = desiredPosition;
-        motor.setControl(new PositionVoltage(desiredPosition));
+        this.desiredAngle = Degrees.of(angle);
+        master.setControl(new PositionVoltage(desiredAngle));
+    }
+
+    /**
+     * Gets the angle
+     */
+    public Angle getCurrentAngle()
+    {
+        return master.getPosition().getValue();
     }
 
     /**

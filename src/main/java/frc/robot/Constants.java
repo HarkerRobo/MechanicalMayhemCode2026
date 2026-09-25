@@ -38,6 +38,12 @@ public final class Constants
     public static final Voltage MAX_VOLTAGE = Volts.of(12.0);
     public static final Voltage ARM_VOLTAGE = Volts.of(5.0);
 
+    public static final double BLOCK_HEIGHT = 0; //TODO // 6" foam cubes
+        
+    public static final double LEVEL_FLOOR = 0; //TODO
+    public static final double LEVEL_FIRST_SHELF= 0; //TODO
+    public static final double LEVEL_TOP_SHELF = 0; //TODO
+
     public static class OperatorConstants 
     {
         public static final int kDriverControllerPort = 0;
@@ -45,6 +51,8 @@ public final class Constants
 
     public static class Arm 
     {
+        public static final double ARM_LENGTH = 0; //TODO
+
         public static final int MASTER_ID = 0;
         public static final int FOLLOWER_ID = 0;
         public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
@@ -65,7 +73,8 @@ public final class Constants
         public static final Voltage ARM_UP_VOLTAGE = Volts.of(5); //TODO
         public static final Voltage ARM_DOWN_VOLTAGE = Volts.of(-5); //TODO
         public static final Voltage ARM_DOWN_VOLTAGE_STAY = Volts.of(1); //TODO
-        
+
+        public static final Angle ARM_CHANGE_ANGLE = Degrees.of(0.1); //TODO
     }
 
     public static class Intake
