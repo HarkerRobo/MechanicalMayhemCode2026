@@ -8,6 +8,7 @@ import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.signals.*;
+import com.ctre.phoenix6.sim.ChassisReference;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -59,7 +60,7 @@ public final class Constants
         public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Opposed; //TODO
 
         public static final Current STALLING_CURRENT = Amps.of(0);
-        public static final double GEAR_RATIO = 0;
+        public static final double GEAR_RATIO = 1.0;
         public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(0);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(0);
 
@@ -75,6 +76,8 @@ public final class Constants
         public static final Voltage ARM_DOWN_VOLTAGE_STAY = Volts.of(1); //TODO
 
         public static final Angle ARM_CHANGE_ANGLE = Degrees.of(0.1); //TODO
+
+        public static final MomentOfInertia ARM_MOI = KilogramSquareMeters.of(0.001); //TODO
     }
 
     public static class Intake
@@ -100,6 +103,10 @@ public final class Constants
         public static final InvertedValue LEFT_INVERTED = InvertedValue.CounterClockwise_Positive;
         public static final InvertedValue RIGHT_INVERTED = InvertedValue.CounterClockwise_Positive;
         public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Opposed;
+
+        public static final ChassisReference MECHANICAL_ORIENTATION = ChassisReference.CounterClockwise_Positive;
+
+        public static final MomentOfInertia INTAKE_MOI = KilogramSquareMeters.of(0.001); //TODO
     }
 }
 

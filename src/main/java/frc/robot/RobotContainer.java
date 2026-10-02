@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
+import frc.robot.commands.arm.*;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -21,12 +23,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {    
   
-    private SendableChooser<Command> autonChooser;
-    public ArrayList<SendableChooser<SubsystemStatus>> modeChoosers = new ArrayList<>();
+
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
     public final CommandXboxController driver =
-    new CommandXboxController(OperatorConstants.kDriverControllerPort);
+        new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
     public static int INTAKE_INDEX = 0;
     public static int ARM_INDEX = 1;
@@ -37,6 +38,7 @@ public class RobotContainer {
     public RobotContainer() {
         // Configure the trigger bindings
         configureBindings();
+
     }
 
     /**
@@ -50,10 +52,12 @@ public class RobotContainer {
      */
     private void configureBindings()
     {        
-                                                
+        // Move the arm
+        driver.button(0).whileTrue(new ArmDown());
+        driver.button(1).whileTrue(new ArmUp());                                     
     }
                     
-    public Command getAutonomousCommand()
+    /*public Command getAutonomousCommand()
     {        
         return autonChooser.getSelected();
     }
@@ -61,5 +65,5 @@ public class RobotContainer {
     public SubsystemStatus getStatus(int subsystem)
     {
         return modeChoosers.get(subsystem).getSelected();
-    }
+    }*/
 }

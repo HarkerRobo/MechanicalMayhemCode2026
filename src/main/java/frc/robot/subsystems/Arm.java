@@ -2,12 +2,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.SubsystemStatus;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
 
@@ -22,8 +24,7 @@ public class Arm extends SubsystemBase {
 
     private TalonFX master;
     private TalonFX follower;
-
-    private static Angle currentAngle;
+    
     private static Angle desiredAngle;
 
     private Arm ()
@@ -32,6 +33,10 @@ public class Arm extends SubsystemBase {
         follower = new TalonFX(Constants.Arm.FOLLOWER_ID, Constants.CAN_SUPERSTRUCTURE);
 
         config();
+
+        if (isSimulated())
+        {
+        }
     }
 
     private void config()
@@ -151,13 +156,17 @@ public class Arm extends SubsystemBase {
         return master;
     }
 
+    public Pose3d[] getSimPoses() {
+        return null;
+    }
+
     /**
      * Returns true if the subsystem is running in simulation.
      * Uses RobotContainer status to determine the mode.
      */
     private boolean isSimulated ()
     {
-        return Robot.instance.robotContainer.getStatus(RobotContainer.INTAKE_INDEX) == SubsystemStatus.Simulated;
+        return Robot.instance.isSimulation();
     }
     
 
@@ -167,7 +176,7 @@ public class Arm extends SubsystemBase {
      */
     private boolean isDisabled ()
     {
-        return Robot.instance.robotContainer.getStatus(RobotContainer.INTAKE_INDEX) == SubsystemStatus.Disabled;
+        return Robot.instance.isDisabled();    
     }
 
 }

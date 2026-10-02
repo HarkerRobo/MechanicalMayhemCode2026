@@ -218,7 +218,8 @@ public class Intake extends SubsystemBase
      */
     private boolean isSimulated ()
     {
-        return Robot.instance.robotContainer.getStatus(RobotContainer.INTAKE_INDEX) == SubsystemStatus.Simulated;
+        return Robot.instance.isSimulation();
+        
     }
     
 
@@ -228,7 +229,7 @@ public class Intake extends SubsystemBase
      */
     private boolean isDisabled ()
     {
-        return Robot.instance.robotContainer.getStatus(RobotContainer.INTAKE_INDEX) == SubsystemStatus.Disabled;
+        return Robot.instance.isDisabled();
     }
 
 }

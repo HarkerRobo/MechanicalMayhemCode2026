@@ -31,6 +31,7 @@ public class ArmUp extends Command
     @Override
     public boolean isFinished() {
         return false;
+        
     }
     
 }
