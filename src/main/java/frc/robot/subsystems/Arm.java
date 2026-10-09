@@ -4,6 +4,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -11,6 +13,9 @@ import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.SubsystemStatus;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -24,6 +29,14 @@ public class Arm extends SubsystemBase {
 
     private TalonFX master;
     private TalonFX follower;
+
+    private DCMotorSim motorSim = new DCMotorSim( //x60 for arm 
+            LinearSystemId.createDCMotorSystem(
+                DCMotor.getKrakenX60Foc(1), Constants.Arm.ARM_MOI.in(KilogramSquareMeters), Constants.Arm.GEAR_RATIO
+            ),
+            DCMotor.getKrakenX60Foc(1)
+    );
+    //private TalonFXSimState followerSim;
     
     private static Angle desiredAngle;
 
@@ -31,12 +44,16 @@ public class Arm extends SubsystemBase {
     {
         master = new TalonFX(Constants.Arm.MASTER_ID, Constants.CAN_SUPERSTRUCTURE);
         follower = new TalonFX(Constants.Arm.FOLLOWER_ID, Constants.CAN_SUPERSTRUCTURE);
-
-        config();
-
+        
+        //sim = new TalonFXSimState(master);
+        //followerSim = new TalonFXSimState(follower);
         if (isSimulated())
         {
+            master.getSimState().Orientation = Constants.Arm.MECHANICAL_ORIENTATION;
+            master.getSimState().setMotorType(TalonFXSimState.MotorType.KrakenX60);
         }
+
+        config();
     }
 
     private void config()
@@ -160,10 +177,33 @@ public class Arm extends SubsystemBase {
         return null;
     }
 
+    public void periodic() {
+        if(isSimulated())
+        {
+            TalonFXSimState simState = master.getSimState();
+
+            simState.setSupplyVoltage(RobotController.getBatteryVoltage());
+
+            // use the motor voltage to calculate new position and velocity
+            // using WPILib's DCMotorSim class for physics simulation
+            motorSim.setInputVoltage(simState.getMotorVoltageMeasure().in(Volts));
+            motorSim.update(0.020); // assume 20 ms loop time
+
+            // apply the new rotor position and velocity to the TalonFX;
+            // note that this is rotor position/velocity (before gear ratio), but
+            // DCMotorSim returns mechanism position/velocity (after gear ratio)
+            simState.setRawRotorPosition(motorSim.getAngularPosition());
+            simState.setRotorVelocity(motorSim.getAngularVelocity());
+            //System.out.println(getCurrentAngle().in(Degrees));
+        }
+    }
+
     /**
      * Returns true if the subsystem is running in simulation.
      * Uses RobotContainer status to determine the mode.
      */
+
+    
     private boolean isSimulated ()
     {
         return Robot.instance.isSimulation();

@@ -50,6 +50,10 @@ public final class Constants
         public static final int kDriverControllerPort = 0;
     }
 
+    public static class Swerve {
+        
+    }
+
     public static class Arm 
     {
         public static final double ARM_LENGTH = 0; //TODO
@@ -58,9 +62,10 @@ public final class Constants
         public static final int FOLLOWER_ID = 0;
         public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
         public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Opposed; //TODO
+        public static final ChassisReference MECHANICAL_ORIENTATION = ChassisReference.CounterClockwise_Positive; // TODO
 
         public static final Current STALLING_CURRENT = Amps.of(0);
-        public static final double GEAR_RATIO = 1.0;
+        public static final double GEAR_RATIO = 48.0;
         public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(0);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(0);
 
@@ -75,7 +80,7 @@ public final class Constants
         public static final Voltage ARM_DOWN_VOLTAGE = Volts.of(-5); //TODO
         public static final Voltage ARM_DOWN_VOLTAGE_STAY = Volts.of(1); //TODO
 
-        public static final Angle ARM_CHANGE_ANGLE = Degrees.of(0.1); //TODO
+        public static final Angle ARM_CHANGE_ANGLE = Degrees.of(2); //TODO
 
         public static final MomentOfInertia ARM_MOI = KilogramSquareMeters.of(0.001); //TODO
     }
@@ -87,8 +92,8 @@ public final class Constants
         public static final int LEFT_ID = 0;
         public static final int RIGHT_ID = 0;
 
-        public static final double RIGHT_GEAR_RATIO = 48;
-        public static final double LEFT_GEAR_RATIO = 48;
+        public static final double RIGHT_GEAR_RATIO = 18/14;
+        public static final double LEFT_GEAR_RATIO = 18/14;
 
         public static final double KP = 0;
         public static final double KI = 0;

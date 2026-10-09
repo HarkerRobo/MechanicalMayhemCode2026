@@ -1,9 +1,13 @@
 package frc.robot;
 
 import edu.wpi.first.networktables.*;
+import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.math.geometry.*;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Arm;
+
+import edu.wpi.first.units.measure.*;
+import static edu.wpi.first.units.Units.*;
 
 public class Telemetry {
     private static Telemetry instance;
@@ -11,17 +15,14 @@ public class Telemetry {
     private NetworkTableInstance tableInstance = NetworkTableInstance.getDefault();
     private NetworkTable table = tableInstance.getTable("1072");
 
-    private NetworkTable simTable = table.getSubTable("Sim");
-    private NetworkTable armSimTable = simTable.getSubTable("Arm");
-    private StructPublisher armSimPose3d = armSimTable.getStructTopic("arm pose", Pose3d.struct).publish();
 
-    private NetworkTable armTable = table.getSubTable("Arm Table");
-    private DoublePublisher armPosition = armTable.getDoubleTopic("Arm Sim Position").publish();
-    private DoublePublisher armVelocity = armTable.getDoubleTopic("Simulation Angular Velocity").publish();
+    private NetworkTable armTable = table.getSubTable("Arm");
+    private DoublePublisher armPosition = armTable.getDoubleTopic("Arm Angular Position").publish();
+    private DoublePublisher armVelocity = armTable.getDoubleTopic("Arm Angular Velocity").publish();
 
     private NetworkTable intakeTable = table.getSubTable("Intake");
-    private DoublePublisher intakeVelocityRight = intakeTable.getDoubleTopic("Simulation Intake Velocity Right").publish();
-    private DoublePublisher intakeVelocityLeft = intakeTable.getDoubleTopic("Simulation Intake Velocity Left").publish();
+    private DoublePublisher intakeVelocityRight = intakeTable.getDoubleTopic("Intake Velocity Right").publish();
+    private DoublePublisher intakeVelocityLeft = intakeTable.getDoubleTopic("Intake Velocity Left").publish();
     
     private Telemetry() 
     {
@@ -30,19 +31,10 @@ public class Telemetry {
 
     public void update() 
     {
-        
-    }
-
-    public void updateArmSim(double angularPosition, double angularVelocity)
-    {
-        armPosition.set(angularPosition);
-        armVelocity.set(angularVelocity);
-    }
-
-    public void updateIntakeSim(double leftVelocity, double rightVelocity)
-    {
-        intakeVelocityRight.set(leftVelocity);
-        intakeVelocityLeft.set(rightVelocity); 
+        armPosition.set(Arm.getInstance().getCurrentAngle().in(Degrees));
+        armVelocity.set(Arm.getInstance().getVelocity().in(DegreesPerSecond));
+        intakeVelocityLeft.set(Intake.getInstance().getLeftVoltage().in(Volts));
+        intakeVelocityRight.set(Intake.getInstance().getRightVoltage().in(Volts));
     }
 
     public static Telemetry getInstance ()

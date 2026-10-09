@@ -53,8 +53,8 @@ public class RobotContainer {
     private void configureBindings()
     {        
         // Move the arm
-        driver.button(0).whileTrue(new ArmDown());
-        driver.button(1).whileTrue(new ArmUp());                                     
+        driver.button(1).whileTrue(new ArmDown());
+        driver.button(2).whileTrue(new ArmUp());                                     
     }
                     
     /*public Command getAutonomousCommand()

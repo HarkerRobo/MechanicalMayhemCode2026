@@ -10,7 +10,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -32,7 +32,11 @@ public class Robot extends TimedRobot {
     private final DCMotorSim armMotorSim;
     private final DCMotorSim intakeMotorSim;
 
-    Mechanism2d armMechanism = new Mechanism2d(3, 3);
+    Mechanism2d armMechanism = new Mechanism2d(20, 20);
+    MechanismRoot2d armroot = armMechanism.getRoot("arm", 2, 2);
+
+    MechanismLigament2d bot = armroot.append(new MechanismLigament2d("bot", 2, 90));
+    MechanismLigament2d arm = bot.append(new MechanismLigament2d("arm", 10.0, 30.0));
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -42,17 +46,11 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
-
-
+    
         robotContainer = new RobotContainer();
         instance = this;
 
-        armMotorSim = new DCMotorSim( //x60 for arm 
-            LinearSystemId.createDCMotorSystem(
-                DCMotor.getKrakenX60Foc(1), Constants.Arm.ARM_MOI.in(KilogramSquareMeters), Constants.Arm.GEAR_RATIO
-            ),
-            DCMotor.getKrakenX60Foc(1)
-        );
+        armMotorSim = 
 
         intakeMotorSim = new DCMotorSim( //x60 for intake
             LinearSystemId.createDCMotorSystem(
@@ -60,6 +58,8 @@ public class Robot extends TimedRobot {
             ),
             DCMotor.getKrakenX60Foc(1)
         );   
+
+        SmartDashboard.putData("Mech2d", armMechanism);
     }
 
     /**
@@ -139,12 +139,12 @@ public class Robot extends TimedRobot {
     @Override
     public void simulationPeriodic() {
         // Get arm voltage
-        Voltage motorVoltage = Arm.getInstance().getVoltage();
+        // Voltage motorVoltage = Arm.getInstance().getVoltage();
 
-        // use the motor voltage to calculate new position and velocity
-        // using WPILib's DCMotorSim class for physics simulation
-        armMotorSim.setInputVoltage(motorVoltage.in(Volts));
-        armMotorSim.update(0.020); // assume 20 ms loop time
+        // // use the motor voltage to calculate new position and velocity
+        // // using WPILib's DCMotorSim class for physics simulation
+        // armMotorSim.setInputVoltage(motorVoltage.in(Volts));
+        //armMotorSim.update(0.020); // assume 20 ms loop time
 
         // apply the new rotor position and velocity to the TalonFX;
         // note that this is rotor position/velocity (before gear ratio), but
@@ -152,15 +152,22 @@ public class Robot extends TimedRobot {
         // armSim.setRawRotorPosition(armMotorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO));
         // armSim.setRotorVelocity(armMotorSim.getAngularVelocity().times(Constants.Arm.GEAR_RATIO));
 
-        // To retrieve position & Velocity data:
-        // armMotorSim.getAngularPosition();
-        // armMotorSim.getAngularVelocity();
-        // TODO: Telemetry
+        Telemetry.getInstance().update();
 
-        Telemetry.getInstance().updateArmSim(
-            armMotorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO).in(Degrees),
-            armMotorSim.getAngularVelocity().times(Constants.Arm.GEAR_RATIO).in(DegreesPerSecond)
-        );
-
+        //arm.setAngle(armMotorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO).in(Degrees));
     }
+
+    public static Robot getInstance() {
+        if (instance == null) {instance = new Robot();}
+        return instance;
+    }
+    
+    //public DCMotorSim getArmMotorSim() {
+       // return armMotorSim;
+    //}
+    
+    public DCMotorSim getIntakeMotorSim() {
+        return intakeMotorSim;
+    }
+
 }
