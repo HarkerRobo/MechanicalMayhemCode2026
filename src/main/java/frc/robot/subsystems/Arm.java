@@ -19,8 +19,11 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 
 public class Arm extends SubsystemBase {
@@ -32,17 +35,15 @@ public class Arm extends SubsystemBase {
 
     private DCMotorSim motorSim = new DCMotorSim( //x60 for arm 
             LinearSystemId.createDCMotorSystem(
-                DCMotor.getKrakenX60Foc(1), Constants.Arm.ARM_MOI.in(KilogramSquareMeters), Constants.Arm.GEAR_RATIO
+                DCMotor.getKrakenX60Foc(2), Constants.Arm.ARM_MOI.in(KilogramSquareMeters), Constants.Arm.GEAR_RATIO
             ),
-            DCMotor.getKrakenX60Foc(1)
+            DCMotor.getKrakenX60Foc(2)
     );
     //private TalonFXSimState followerSim;
     
-    private static Angle desiredAngle;
-
     private Arm ()
     {
-        master = new TalonFX(Constants.Arm.MASTER_ID, Constants.CAN_SUPERSTRUCTURE);
+        master = new TalonFX(Constants.Arm.MASTER_ID, Constants.CAN_SUPERSTRUCTURE); //might be a bad idea for them to have same superstructure
         follower = new TalonFX(Constants.Arm.FOLLOWER_ID, Constants.CAN_SUPERSTRUCTURE);
         
         //sim = new TalonFXSimState(master);
@@ -74,7 +75,7 @@ public class Arm extends SubsystemBase {
 
         config.Feedback.SensorToMechanismRatio = Constants.Arm.GEAR_RATIO;
 
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         config.Voltage.PeakForwardVoltage = Constants.MAX_VOLTAGE.in(Volts);
         config.Voltage.PeakReverseVoltage = -Constants.MAX_VOLTAGE.in(Volts);
@@ -144,13 +145,15 @@ public class Arm extends SubsystemBase {
     }
 
     /**
-     * Moves to angle
-     * @param angle the angle to move the Arm's pitch to that degree
-     */
-    public void MoveToAngle(double angle)
+    * Commands to hold a target velocity.
+    * Automatically does feedforward and PID.
+    */
+    public void setVelocity(AngularVelocity velocity)
     {
-        this.desiredAngle = Degrees.of(angle);
-        master.setControl(new PositionVoltage(desiredAngle));
+        System.out.println("Velocity:" + velocity.in(DegreesPerSecond));
+        //this.desiredAngularVelocity = velocity;
+        //master.setControl(new VelocityVoltage(desiredAngularVelocity));
+        master.setControl(new VelocityVoltage(velocity));
     }
 
     /**
@@ -159,14 +162,6 @@ public class Arm extends SubsystemBase {
     public Angle getCurrentAngle()
     {
         return master.getPosition().getValue();
-    }
-
-    /**
-    * Commands to hold a target velocity.
-    * Automatically does feedforward and PID.
-    */
-    public void setVelocity (AngularVelocity velocity)
-    {
     }
 
     public TalonFX getMasterMotor() {
@@ -187,13 +182,14 @@ public class Arm extends SubsystemBase {
             // use the motor voltage to calculate new position and velocity
             // using WPILib's DCMotorSim class for physics simulation
             motorSim.setInputVoltage(simState.getMotorVoltageMeasure().in(Volts));
+            System.out.println("Volts: " + simState.getMotorVoltageMeasure().in(Volts));
             motorSim.update(0.020); // assume 20 ms loop time
 
             // apply the new rotor position and velocity to the TalonFX;
             // note that this is rotor position/velocity (before gear ratio), but
             // DCMotorSim returns mechanism position/velocity (after gear ratio)
-            simState.setRawRotorPosition(motorSim.getAngularPosition());
-            simState.setRotorVelocity(motorSim.getAngularVelocity());
+            simState.setRawRotorPosition(motorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO));
+            simState.setRotorVelocity(motorSim.getAngularVelocity().times(Constants.Arm.GEAR_RATIO));
             //System.out.println(getCurrentAngle().in(Degrees));
         }
     }
