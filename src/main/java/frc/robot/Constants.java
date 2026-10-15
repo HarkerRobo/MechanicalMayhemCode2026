@@ -87,7 +87,7 @@ public final class Constants
 
     public static class Intake
     {
-        public static final AngularVelocity INTAKE_VELOCITY = RotationsPerSecond.of(-30.0); // rot/s
+        public static final AngularVelocity INTAKE_VELOCITY = RotationsPerSecond.of(-10.0); // rot/s
 
         public static final int LEFT_ID = 2;
         public static final int RIGHT_ID = 3;
@@ -95,15 +95,17 @@ public final class Constants
         public static final double RIGHT_GEAR_RATIO = 18/14;
         public static final double LEFT_GEAR_RATIO = 18/14;
 
-        public static final double KP = 0;
+        public static final double KP = 1;
         public static final double KI = 0;
         public static final double KD = 0;
 
-        public static final double KA = 0;
-        public static final double KS = 0;
-        public static final double KV = 0;
+        public static final double KA = 1;
+        public static final double KS = 1;
+        public static final double KV = 1;
 
         public static final Current STALLING_CURRENT = Amps.of(30.0);
+        public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(60);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(80);
 
         public static final InvertedValue LEFT_INVERTED = InvertedValue.CounterClockwise_Positive;
         public static final InvertedValue RIGHT_INVERTED = InvertedValue.CounterClockwise_Positive;

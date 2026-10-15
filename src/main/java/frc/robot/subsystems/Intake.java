@@ -55,19 +55,20 @@ public class Intake extends SubsystemBase
         left.clearStickyFaults();
         right.clearStickyFaults();
 
-        TalonFXConfiguration leftConfig = new TalonFXConfiguration();
-        leftConfig.Feedback.SensorToMechanismRatio = Constants.Intake.LEFT_GEAR_RATIO;
-        leftConfig.MotorOutput.Inverted = Constants.Intake.LEFT_INVERTED;
-        leftConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        left.getConfigurator().apply(leftConfig);
-        TalonFXConfiguration rightConfig = new TalonFXConfiguration();
-        rightConfig.Feedback.SensorToMechanismRatio = Constants.Intake.RIGHT_GEAR_RATIO;
-        rightConfig.MotorOutput.Inverted = Constants.Intake.RIGHT_INVERTED;
-        right.getConfigurator().apply(rightConfig);
-
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        if (isSimulated())
+        {
+            config.CurrentLimits.StatorCurrentLimit = Constants.Intake.STATOR_CURRENT_LIMIT.in(Amps);
+            config.CurrentLimits.StatorCurrentLimitEnable = true;
+            
+            config.CurrentLimits.SupplyCurrentLimit = Constants.Intake.SUPPLY_CURRENT_LIMIT.in(Amps);
+            config.CurrentLimits.SupplyCurrentLimitEnable = true;
+        }
+
+        config.Feedback.SensorToMechanismRatio = Constants.Intake.LEFT_GEAR_RATIO;
+
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         config.Voltage.PeakForwardVoltage = Constants.MAX_VOLTAGE.in(Volts);
         config.Voltage.PeakReverseVoltage = -Constants.MAX_VOLTAGE.in(Volts);
@@ -78,9 +79,47 @@ public class Intake extends SubsystemBase
         config.Slot0.kS = Constants.Intake.KS;
         config.Slot0.kV = Constants.Intake.KV;
         config.Slot0.kA = Constants.Intake.KA;
+        config.MotorOutput.Inverted = Constants.Intake.LEFT_INVERTED;
 
         left.getConfigurator().apply(config);
         right.setControl(new Follower(Constants.Intake.LEFT_ID, Constants.Intake.MOTOR_ALIGNMENT));
+        // left.clearStickyFaults();
+        // right.clearStickyFaults();
+
+        // TalonFXConfiguration leftConfig = new TalonFXConfiguration();
+        
+        // if (isSimulated())
+        // {
+        //     leftConfig.CurrentLimits.StatorCurrentLimit = Constants.Arm.STATOR_CURRENT_LIMIT.in(Amps);
+        //     leftConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+            
+        //     leftConfig.CurrentLimits.SupplyCurrentLimit = Constants.Arm.SUPPLY_CURRENT_LIMIT.in(Amps);
+        //     leftConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+        // }
+        // leftConfig.Feedback.SensorToMechanismRatio = Constants.Intake.LEFT_GEAR_RATIO;
+        // leftConfig.MotorOutput.Inverted = Constants.Intake.LEFT_INVERTED;
+        // leftConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        // left.getConfigurator().apply(leftConfig);
+
+        // TalonFXConfiguration rightConfig = new TalonFXConfiguration();
+        // rightConfig.Feedback.SensorToMechanismRatio = Constants.Intake.RIGHT_GEAR_RATIO;
+        // rightConfig.MotorOutput.Inverted = Constants.Intake.RIGHT_INVERTED;
+        // right.getConfigurator().apply(rightConfig);
+
+        // config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+
+        // config.Voltage.PeakForwardVoltage = Constants.MAX_VOLTAGE.in(Volts);
+        // config.Voltage.PeakReverseVoltage = -Constants.MAX_VOLTAGE.in(Volts);
+        
+        // config.Slot0.kP = Constants.Intake.KP;
+        // config.Slot0.kI = Constants.Intake.KI;
+        // config.Slot0.kD = Constants.Intake.KD;
+        // config.Slot0.kS = Constants.Intake.KS;
+        // config.Slot0.kV = Constants.Intake.KV;
+        // config.Slot0.kA = Constants.Intake.KA;
+
+        // left.getConfigurator().apply(config);
+        // right.setControl(new Follower(Constants.Intake.LEFT_ID, Constants.Intake.MOTOR_ALIGNMENT));
     }
 
     /**
@@ -162,7 +201,7 @@ public class Intake extends SubsystemBase
             System.out.println("Quashing input to Intake");
             return;
         }
-        right.setControl(new VoltageOut(voltage));
+        left.setControl(new VoltageOut(voltage));
     }
 
     /**
@@ -177,7 +216,9 @@ public class Intake extends SubsystemBase
             System.out.println("Quashing input to Intake");
             return;
         }
-        right.setControl(new VelocityVoltage(velocity));
+        left.setControl(new VelocityVoltage(velocity));
+        System.out.print(velocity.in(DegreesPerSecond));
+        
     }
     
     /**
@@ -194,7 +235,7 @@ public class Intake extends SubsystemBase
 
         if (isSimulated())
         {
-            TalonFXSimState simState = right.getSimState();
+            TalonFXSimState simState = left.getSimState();
 
             // set the supply voltage of the TalonFX
             simState.setSupplyVoltage(RobotController.getBatteryVoltage());

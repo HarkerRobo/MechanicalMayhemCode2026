@@ -27,8 +27,6 @@ public class ArmUp extends Command
     public void execute()
     {
         Arm.getInstance().setVelocity(Constants.Arm.UP_VELOCITY);
-        //System.out.println("Running: True \nCurrent: " + Arm.getInstance().getCurrentAngle().in(Degrees) + "Change: " +  (Constants.Arm.ARM_CHANGE_ANGLE).in(Degrees));
-       // Robot.getInstance().getArmMotorSim().setInputVoltage(Constants.ARM_VOLTAGE.in(Volts));
     }
     
     @Override

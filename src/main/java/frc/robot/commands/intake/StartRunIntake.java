@@ -31,8 +31,9 @@ public class StartRunIntake extends Command
         // }
         // else
         // {
-            Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
+        Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
         // }
+        System.out.println("intaking");
     }
 
 
@@ -42,7 +43,7 @@ public class StartRunIntake extends Command
     @Override
     public boolean isFinished () 
     {
-        return true;
+        return false;
     }
 
     /**

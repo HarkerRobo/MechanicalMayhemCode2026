@@ -14,7 +14,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.arm.*;
+import frc.robot.commands.intake.StartDefaultIntake;
+import frc.robot.commands.intake.StartRunIntake;
 import frc.robot.subsystems.Arm;
+import frc.robot.subsystems.Intake;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -53,10 +56,12 @@ public class RobotContainer {
      */
     private void configureBindings()
     {      
-         Arm.getInstance().setDefaultCommand(new ArmDefault()); 
+        Arm.getInstance().setDefaultCommand(new ArmDefault()); 
+        Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
         // Move the arm
         driver.button(1).whileTrue(new ArmDown());
-        driver.button(2).whileTrue(new ArmUp());                                     
+        driver.button(2).whileTrue(new ArmUp());     
+        driver.button(3).whileTrue(new StartRunIntake());                                
     }
                     
     /*public Command getAutonomousCommand()
