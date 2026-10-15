@@ -24,7 +24,7 @@ public class ArmDown extends Command
     @Override
     public void execute() {
         //Arm.getInstance().setVelocity(DegreesPerSecond.of(0.1));
-        Arm.getInstance().setVoltage(Volts.of(2));
+        Arm.getInstance().setVelocity(Constants.Arm.DOWN_VELOCITY);
         //System.out.println("Running: True \nCurrent: " + Arm.getInstance().getCurrentAngle().in(Degrees) + "Change: " +  (Constants.Arm.ARM_CHANGE_ANGLE).in(Degrees));
         //Robot.getInstance().getArmMotorSim().setInputVoltage(-Constants.ARM_VOLTAGE.in(Volts));
     }

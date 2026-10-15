@@ -150,9 +150,6 @@ public class Arm extends SubsystemBase {
     */
     public void setVelocity(AngularVelocity velocity)
     {
-        System.out.println("Velocity:" + velocity.in(DegreesPerSecond));
-        //this.desiredAngularVelocity = velocity;
-        //master.setControl(new VelocityVoltage(desiredAngularVelocity));
         master.setControl(new VelocityVoltage(velocity));
     }
 
@@ -182,7 +179,6 @@ public class Arm extends SubsystemBase {
             // use the motor voltage to calculate new position and velocity
             // using WPILib's DCMotorSim class for physics simulation
             motorSim.setInputVoltage(simState.getMotorVoltageMeasure().in(Volts));
-            System.out.println("Volts: " + simState.getMotorVoltageMeasure().in(Volts));
             motorSim.update(0.020); // assume 20 ms loop time
 
             // apply the new rotor position and velocity to the TalonFX;
@@ -190,7 +186,6 @@ public class Arm extends SubsystemBase {
             // DCMotorSim returns mechanism position/velocity (after gear ratio)
             simState.setRawRotorPosition(motorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO));
             simState.setRotorVelocity(motorSim.getAngularVelocity().times(Constants.Arm.GEAR_RATIO));
-            //System.out.println(getCurrentAngle().in(Degrees));
         }
     }
 

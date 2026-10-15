@@ -72,15 +72,15 @@ public final class Constants
         public static final double KP = 2;
         public static final double KI = 0;
         public static final double KD = 0;
-        public static final double KA = 0.1;
-        public static final double KS = 0.1;
-        public static final double KV = 0.1;
+        public static final double KA = 1;
+        public static final double KS = 1;
+        public static final double KV = 1;
 
-        public static final Voltage ARM_UP_VOLTAGE = Volts.of(5); //TODO
-        public static final Voltage ARM_DOWN_VOLTAGE = Volts.of(-5); //TODO
-        public static final Voltage ARM_DOWN_VOLTAGE_STAY = Volts.of(1); //TODO
-
-        public static final Angle ARM_CHANGE_ANGLE = Degrees.of(2); //TODO
+        public static final Voltage UP_VOLTAGE = Volts.of(5); //TODO
+        public static final Voltage DOWN_VOLTAGE = Volts.of(-5); //TODO
+        public static final Voltage DEFAULT_VOLTAGE = Volts.of(0); //TODO
+        public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(5);
+        public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-5);
 
         public static final MomentOfInertia ARM_MOI = KilogramSquareMeters.of(0.001); //TODO
     }
