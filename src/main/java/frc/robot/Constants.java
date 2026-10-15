@@ -59,28 +59,28 @@ public final class Constants
         public static final double ARM_LENGTH = 0; //TODO
 
         public static final int MASTER_ID = 0;
-        public static final int FOLLOWER_ID = 0;
+        public static final int FOLLOWER_ID = 1;
         public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
         public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Opposed; //TODO
         public static final ChassisReference MECHANICAL_ORIENTATION = ChassisReference.CounterClockwise_Positive; // TODO
 
-        public static final Current STALLING_CURRENT = Amps.of(0);
+        public static final Current STALLING_CURRENT = Amps.of(10);
         public static final double GEAR_RATIO = 48.0;
-        public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(0);
-        public static final Current STATOR_CURRENT_LIMIT = Amps.of(0);
+        public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(60);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(80);
 
-        public static final double KP = 0;
+        public static final double KP = 2;
         public static final double KI = 0;
         public static final double KD = 0;
-        public static final double KA = 0;
-        public static final double KS = 0;
-        public static final double KV = 0;
+        public static final double KA = 1;
+        public static final double KS = 1;
+        public static final double KV = 1;
 
-        public static final Voltage ARM_UP_VOLTAGE = Volts.of(5); //TODO
-        public static final Voltage ARM_DOWN_VOLTAGE = Volts.of(-5); //TODO
-        public static final Voltage ARM_DOWN_VOLTAGE_STAY = Volts.of(1); //TODO
-
-        public static final Angle ARM_CHANGE_ANGLE = Degrees.of(2); //TODO
+        public static final Voltage UP_VOLTAGE = Volts.of(5); //TODO
+        public static final Voltage DOWN_VOLTAGE = Volts.of(-5); //TODO
+        public static final Voltage DEFAULT_VOLTAGE = Volts.of(0); //TODO
+        public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(5);
+        public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-5);
 
         public static final MomentOfInertia ARM_MOI = KilogramSquareMeters.of(0.001); //TODO
     }
@@ -89,8 +89,8 @@ public final class Constants
     {
         public static final AngularVelocity INTAKE_VELOCITY = RotationsPerSecond.of(-30.0); // rot/s
 
-        public static final int LEFT_ID = 0;
-        public static final int RIGHT_ID = 0;
+        public static final int LEFT_ID = 2;
+        public static final int RIGHT_ID = 3;
 
         public static final double RIGHT_GEAR_RATIO = 18/14;
         public static final double LEFT_GEAR_RATIO = 18/14;

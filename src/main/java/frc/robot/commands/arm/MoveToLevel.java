@@ -25,7 +25,8 @@ public class MoveToLevel extends Command
 
     @Override
     public void execute() {
-        Arm.getInstance().MoveToAngle(this.target);
+        // TODO fix me
+        // Arm.getInstance().set(this.target);
     }
 
     @Override

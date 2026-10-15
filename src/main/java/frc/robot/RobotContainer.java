@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.arm.*;
+import frc.robot.subsystems.Arm;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,7 +52,8 @@ public class RobotContainer {
      * joysticks}.
      */
     private void configureBindings()
-    {        
+    {      
+         Arm.getInstance().setDefaultCommand(new ArmDefault()); 
         // Move the arm
         driver.button(1).whileTrue(new ArmDown());
         driver.button(2).whileTrue(new ArmUp());                                     
