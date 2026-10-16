@@ -6,7 +6,12 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Mechanism;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -15,8 +20,11 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 
 import static edu.wpi.first.units.Units.*;
+
+import org.ejml.dense.row.decomposition.hessenberg.TridiagonalDecompositionHouseholderOrig_DDRM;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
@@ -32,6 +40,9 @@ public class Arm extends SubsystemBase {
 
     private TalonFX master;
     private TalonFX follower;
+    private Config config = new Config(Volts.per(Second).of(2),Volts.of(10), Seconds.of(10));
+    private Mechanism mechanism = new SysIdRoutine.Mechanism((Voltage v)->setVoltage(v), (SysIdRoutineLog l)->{}, instance);
+    private SysIdRoutine sysIdRoutine = new SysIdRoutine(config, mechanism);
 
     private DCMotorSim motorSim = new DCMotorSim( //x60 for arm 
             LinearSystemId.createDCMotorSystem(
@@ -45,6 +56,7 @@ public class Arm extends SubsystemBase {
     {
         master = new TalonFX(Constants.Arm.MASTER_ID, Constants.CAN_SUPERSTRUCTURE); //might be a bad idea for them to have same superstructure
         follower = new TalonFX(Constants.Arm.FOLLOWER_ID, Constants.CAN_SUPERSTRUCTURE);
+        
         
         //sim = new TalonFXSimState(master);
         //followerSim = new TalonFXSimState(follower);
@@ -208,6 +220,11 @@ public class Arm extends SubsystemBase {
     private boolean isDisabled ()
     {
         return Robot.instance.isDisabled();    
+    }
+
+    public SysIdRoutine getRoutine ()
+    {
+        return sysIdRoutine;
     }
 
 }
