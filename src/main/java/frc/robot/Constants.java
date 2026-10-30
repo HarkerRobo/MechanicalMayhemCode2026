@@ -12,6 +12,7 @@ import com.ctre.phoenix6.sim.ChassisReference;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
 
@@ -56,7 +57,15 @@ public final class Constants
 
     public static class Arm 
     {
-        public static final double ARM_LENGTH = 0; //TODO
+        public static final Distance ARM_LENGTH = Inches.of(17.170); //TODO fake number
+        public static final Mass ARM_MASS = Kilograms.of(6.577); //TODO not a final number
+        
+        public static final Angle MAX_ANGLE = Degrees.of(202); //TODO slightly fake number
+        public static final Angle MIN_ANGLE = Radians.of(0);
+        public static final Angle STARTING_SIM_ANGLE = Radians.of(0); //TODO very fake number
+
+        public static final Velocity<VoltageUnit> QUASI_RAMP_RATE = Volts.of(1).per(Second);
+        public static final Voltage DYNAMIC_STEP_VOLTAGE = Volts.of(1);
 
         public static final int MASTER_ID = 0;
         public static final int FOLLOWER_ID = 1;
@@ -69,20 +78,20 @@ public final class Constants
         public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(60);
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(80);
 
-        public static final double KP = 2;
+        public static final double KP = 61.202;
         public static final double KI = 0;
-        public static final double KD = 0;
-        public static final double KA = 1;
-        public static final double KS = 1;
-        public static final double KV = 1;
+        public static final double KD = 21.094;
+        public static final double KA = 3.7297;
+        public static final double KS = 1.0481;
+        public static final double KV = 0.30645;
+        public static final double KG = 170.52;
 
-        public static final Voltage UP_VOLTAGE = Volts.of(5); //TODO
-        public static final Voltage DOWN_VOLTAGE = Volts.of(-5); //TODO
+        public static final Voltage UP_VOLTAGE = Volts.of(-20); //TODO
+        public static final Voltage DOWN_VOLTAGE = Volts.of(20); //TODO
         public static final Voltage DEFAULT_VOLTAGE = Volts.of(0); //TODO
-        public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(5);
-        public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-5);
+        public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(50);
+        public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-50);
 
-        public static final MomentOfInertia ARM_MOI = KilogramSquareMeters.of(0.001); //TODO
     }
 
     public static class Intake

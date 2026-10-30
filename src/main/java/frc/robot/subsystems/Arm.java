@@ -6,15 +6,21 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.RobotContainer.SubsystemStatus;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.units.measure.*;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 
 import static edu.wpi.first.units.Units.*;
 
@@ -29,23 +35,21 @@ import com.ctre.phoenix6.controls.VoltageOut;
 public class Arm extends SubsystemBase {
 
     public static Arm instance;
-
+    private SingleJointedArmSim motorSim;
     private TalonFX master;
     private TalonFX follower;
+    private SysIdRoutine routine;
 
-    private DCMotorSim motorSim = new DCMotorSim( //x60 for arm 
-            LinearSystemId.createDCMotorSystem(
-                DCMotor.getKrakenX60Foc(2), Constants.Arm.ARM_MOI.in(KilogramSquareMeters), Constants.Arm.GEAR_RATIO
-            ),
-            DCMotor.getKrakenX60Foc(2)
-    );
-    //private TalonFXSimState followerSim;
+    
+
+    //private TalonFXS imState followerSim;
     
     private Arm ()
     {
         master = new TalonFX(Constants.Arm.MASTER_ID, Constants.CAN_SUPERSTRUCTURE); //might be a bad idea for them to have same superstructure
         follower = new TalonFX(Constants.Arm.FOLLOWER_ID, Constants.CAN_SUPERSTRUCTURE);
-        
+        motorSim = new SingleJointedArmSim(LinearSystemId.createSingleJointedArmSystem(DCMotor.getKrakenX60(2), SingleJointedArmSim.estimateMOI(Constants.Arm.ARM_LENGTH.in(Meters), Constants.Arm.ARM_MASS.in(Kilogram)), Constants.Arm.GEAR_RATIO), DCMotor.getKrakenX60(2), Constants.Arm.GEAR_RATIO, Constants.Arm.ARM_LENGTH.in(Meters), Constants.Arm.MIN_ANGLE.in(Radians), Constants.Arm.MAX_ANGLE.in(Radians), true, Constants.Arm.STARTING_SIM_ANGLE.in(Radians)); 
+        System.out.println("Max: " + Constants.Arm.MAX_ANGLE);
         //sim = new TalonFXSimState(master);
         //followerSim = new TalonFXSimState(follower);
         if (isSimulated())
@@ -59,6 +63,8 @@ public class Arm extends SubsystemBase {
 
     private void config()
     {
+        routine = new SysIdRoutine(new SysIdRoutine.Config(Constants.Arm.QUASI_RAMP_RATE, Constants.Arm.DYNAMIC_STEP_VOLTAGE, null), 
+                                    new SysIdRoutine.Mechanism((Voltage v) -> master.setControl(new VoltageOut(v)), (SysIdRoutineLog l) -> l.motor("Arm").voltage(getVoltage()).angularPosition(getCurrentAngle()).angularVelocity(getVelocity()), this));
         master.clearStickyFaults();
         follower.clearStickyFaults();
 
@@ -71,6 +77,8 @@ public class Arm extends SubsystemBase {
             
             config.CurrentLimits.SupplyCurrentLimit = Constants.Arm.SUPPLY_CURRENT_LIMIT.in(Amps);
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+            motorSim.setState(0, 0);
         }
 
         config.Feedback.SensorToMechanismRatio = Constants.Arm.GEAR_RATIO;
@@ -86,6 +94,7 @@ public class Arm extends SubsystemBase {
         config.Slot0.kS = Constants.Arm.KS;
         config.Slot0.kV = Constants.Arm.KV;
         config.Slot0.kA = Constants.Arm.KA;
+        config.Slot0.kG = Constants.Arm.KG;
         config.MotorOutput.Inverted = Constants.Arm.INVERTED;
 
         master.getConfigurator().apply(config);
@@ -104,6 +113,11 @@ public class Arm extends SubsystemBase {
     public Voltage getVoltage()
     {
         return master.getMotorVoltage().getValue();
+    }
+    
+    public SysIdRoutine getRoutine()
+    {
+        return routine;
     }
     
     /**
@@ -158,6 +172,7 @@ public class Arm extends SubsystemBase {
      */
     public Angle getCurrentAngle()
     {
+        System.out.println("Thing:" + master.getPosition().getValue().in(Degrees));
         return master.getPosition().getValue();
     }
 
@@ -179,13 +194,19 @@ public class Arm extends SubsystemBase {
             // use the motor voltage to calculate new position and velocity
             // using WPILib's DCMotorSim class for physics simulation
             motorSim.setInputVoltage(simState.getMotorVoltageMeasure().in(Volts));
+            
             motorSim.update(0.020); // assume 20 ms loop time
-
+            
             // apply the new rotor position and velocity to the TalonFX;
-            // note that this is rotor position/velocity (before gear ratio), but
-            // DCMotorSim returns mechanism position/velocity (after gear ratio)
-            simState.setRawRotorPosition(motorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO));
-            simState.setRotorVelocity(motorSim.getAngularVelocity().times(Constants.Arm.GEAR_RATIO));
+            simState.setRawRotorPosition(Radians.of(motorSim.getAngleRads()).in(Rotations)*Constants.Arm.GEAR_RATIO);
+            
+            
+            System.out.println("Rads->Rot: " + Radians.of(motorSim.getAngleRads()).in(Rotations));
+            System.out.println("Sim: " + Radians.of(motorSim.getAngleRads()).in(Degrees));
+            System.out.println("Current: " + getCurrentAngle().in(Degrees));
+
+
+            simState.setRotorVelocity(RadiansPerSecond.of(motorSim.getVelocityRadPerSec()).in(RotationsPerSecond)*Constants.Arm.GEAR_RATIO);
         }
     }
 

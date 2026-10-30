@@ -17,8 +17,10 @@ public class Telemetry {
 
 
     private NetworkTable armTable = table.getSubTable("Arm");
-    private DoublePublisher armPosition = armTable.getDoubleTopic("Arm Angular Position").publish();
-    private DoublePublisher armVelocity = armTable.getDoubleTopic("Arm Angular Velocity").publish();
+    private DoublePublisher armPosition = armTable.getDoubleTopic("Arm Position").publish();
+    private DoublePublisher armVelocity = armTable.getDoubleTopic("Arm Velocity").publish();
+    private DoublePublisher armVoltage = armTable.getDoubleTopic("Arm Voltage").publish();
+
 
     private NetworkTable intakeTable = table.getSubTable("Intake");
     private DoublePublisher intakeVelocityRight = intakeTable.getDoubleTopic("Intake Velocity Right").publish();
@@ -33,6 +35,7 @@ public class Telemetry {
     {
         armPosition.set(Arm.getInstance().getCurrentAngle().in(Degrees));
         armVelocity.set(Arm.getInstance().getVelocity().in(DegreesPerSecond));
+        armVoltage.set(Arm.getInstance().getVoltage().in(Volts));
         intakeVelocityLeft.set(Intake.getInstance().getLeftVoltage().in(Volts));
         intakeVelocityRight.set(Intake.getInstance().getRightVoltage().in(Volts));
     }

@@ -8,11 +8,12 @@ import frc.robot.Constants.OperatorConstants;
 
 import java.util.ArrayList;
 
+import edu.wpi.first.hal.SimDevice.Direction;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.commands.arm.*;
 import frc.robot.commands.intake.StartDefaultIntake;
 import frc.robot.commands.intake.StartRunIntake;
@@ -59,9 +60,17 @@ public class RobotContainer {
         Arm.getInstance().setDefaultCommand(new ArmDefault()); 
         Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
         // Move the arm
-        driver.button(1).whileTrue(new ArmDown());
+        
+        //driver.button(1).whileTrue(new ArmUp());
+        /* 
         driver.button(2).whileTrue(new ArmUp());     
-        driver.button(3).whileTrue(new StartRunIntake());                                
+        driver.button(3).whileTrue(new StartRunIntake());  
+        */  
+       
+        driver.button(1).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kForward)); 
+        driver.button(2).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kReverse));
+        driver.button(3).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kForward)); 
+        driver.button(4).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kReverse));                                              
     }
                     
     /*public Command getAutonomousCommand()

@@ -8,6 +8,8 @@ import com.ctre.phoenix6.sim.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.system.plant.LinearSystemId;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.smartdashboard.*;
@@ -29,7 +31,6 @@ public class Robot extends TimedRobot {
 
     public final RobotContainer robotContainer;
     public static Robot instance;
-    private final DCMotorSim armMotorSim;
     private final DCMotorSim intakeMotorSim;
 
     Mechanism2d armMechanism = new Mechanism2d(20, 20);
@@ -46,11 +47,10 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
-    
+        
         robotContainer = new RobotContainer();
         instance = this;
 
-        armMotorSim = 
 
         intakeMotorSim = new DCMotorSim( //x60 for intake
             LinearSystemId.createDCMotorSystem(
@@ -60,6 +60,9 @@ public class Robot extends TimedRobot {
         );   
 
         SmartDashboard.putData("Mech2d", armMechanism);
+
+        DataLogManager.start();
+        DriverStation.startDataLog(DataLogManager.getLog());
     }
 
     /**
