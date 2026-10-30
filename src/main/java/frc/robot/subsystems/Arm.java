@@ -49,7 +49,6 @@ public class Arm extends SubsystemBase {
         master = new TalonFX(Constants.Arm.MASTER_ID, Constants.CAN_SUPERSTRUCTURE); //might be a bad idea for them to have same superstructure
         follower = new TalonFX(Constants.Arm.FOLLOWER_ID, Constants.CAN_SUPERSTRUCTURE);
         motorSim = new SingleJointedArmSim(LinearSystemId.createSingleJointedArmSystem(DCMotor.getKrakenX60(2), SingleJointedArmSim.estimateMOI(Constants.Arm.ARM_LENGTH.in(Meters), Constants.Arm.ARM_MASS.in(Kilogram)), Constants.Arm.GEAR_RATIO), DCMotor.getKrakenX60(2), Constants.Arm.GEAR_RATIO, Constants.Arm.ARM_LENGTH.in(Meters), Constants.Arm.MIN_ANGLE.in(Radians), Constants.Arm.MAX_ANGLE.in(Radians), true, Constants.Arm.STARTING_SIM_ANGLE.in(Radians)); 
-        System.out.println("Max: " + Constants.Arm.MAX_ANGLE);
         //sim = new TalonFXSimState(master);
         //followerSim = new TalonFXSimState(follower);
         if (isSimulated())
@@ -77,8 +76,6 @@ public class Arm extends SubsystemBase {
             
             config.CurrentLimits.SupplyCurrentLimit = Constants.Arm.SUPPLY_CURRENT_LIMIT.in(Amps);
             config.CurrentLimits.SupplyCurrentLimitEnable = true;
-
-            motorSim.setState(0, 0);
         }
 
         config.Feedback.SensorToMechanismRatio = Constants.Arm.GEAR_RATIO;
