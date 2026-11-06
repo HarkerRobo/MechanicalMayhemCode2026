@@ -12,6 +12,7 @@ import com.ctre.phoenix6.sim.ChassisReference;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Measure;
 import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
@@ -32,6 +33,12 @@ public final class Constants
     public static final double ROBOT_HEIGHT = 0.89535; //parallel to the intake face (TODO)
     public static final double ROBOT_WIDTH = 0.84455; //TODO
 
+    public static final Distance FIELD_LENGTH = Inches.of(364.0);
+    public static final Distance FIELD_WIDTH = Inches.of(168.0);
+
+    public static final Distance SHELF_HEIGHT_LOW = Inches.of(8.99);
+    public static final Distance SHELF_HEIGHT_HIGH = Inches.of(18.99);
+
     public static final Pose2d ZEROING_POSE = new Pose2d(3.581, 4.20288, new Rotation2d(Degrees.of(180))); //TODO
 
     public static final double TRANSLATION_SLOW_MULTIPLIER = 0.35;
@@ -40,7 +47,7 @@ public final class Constants
     public static final Voltage MAX_VOLTAGE = Volts.of(12.0);
     public static final Voltage ARM_VOLTAGE = Volts.of(5.0);
 
-    public static final double BLOCK_HEIGHT = 0; //TODO // 6" foam cubes
+    public static final Distance BLOCK_HEIGHT = Inches.of(6); //TODO // 6" foam cubes
 
     public static class OperatorConstants 
     {
@@ -48,7 +55,19 @@ public final class Constants
     }
 
     public static class Swerve {
-        
+        public static final double KP_DRIVE = 1.072;
+        public static final double KI_DRIVE = 0;
+        public static final double KD_DRIVE = 1.072;
+        public static final double KA_DRIVE = 0.5;
+        public static final double KS_DRIVE = 0.01072;
+        public static final double KV_DRIVE = 1.072;
+
+        public static final double KP_STEER = 1.072;
+        public static final double KI_STEER = 0;
+        public static final double KD_STEER = 1.072;
+        public static final double KA_STEER = 0.5;
+        public static final double KS_STEER = 0.01072;
+        public static final double KV_STEER = 1.072;
     }
 
     public static class Arm 
