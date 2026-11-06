@@ -41,10 +41,6 @@ public final class Constants
     public static final Voltage ARM_VOLTAGE = Volts.of(5.0);
 
     public static final double BLOCK_HEIGHT = 0; //TODO // 6" foam cubes
-        
-    public static final double LEVEL_FLOOR = 0; //TODO
-    public static final double LEVEL_FIRST_SHELF= 0; //TODO
-    public static final double LEVEL_TOP_SHELF = 0; //TODO
 
     public static class OperatorConstants 
     {
@@ -91,12 +87,19 @@ public final class Constants
         public static final Voltage DEFAULT_VOLTAGE = Volts.of(0); //TODO
         public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(50);
         public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-50);
+        
 
+        public static final Angle GROUND_ANGLE = Degrees.of(0); //TODO
+        public static final Angle ZERO_ARM = Degrees.of(10); //TODO when the intake is touching swerve modules  
+        public static final Angle FIRST_SHELF_ANGLE = Degrees.of(20); // TODO
+        public static final Angle STACK_ANGLE = Degrees.of(15); //TODO stacking on the first shelf 
+        public static final Angle TOP_SHELF_ANGLE = Degrees.of(30); // TODO
     }
 
     public static class Intake
     {
         public static final AngularVelocity INTAKE_VELOCITY = RotationsPerSecond.of(-10.0); // rot/s
+        public static final AngularVelocity INTAKE_REVERSE_VELOCITY = RotationsPerSecond.of(10.0); // TODO may be different rot/s
 
         public static final int LEFT_ID = 2;
         public static final int RIGHT_ID = 3;
@@ -123,6 +126,7 @@ public final class Constants
         public static final ChassisReference MECHANICAL_ORIENTATION = ChassisReference.CounterClockwise_Positive;
 
         public static final MomentOfInertia INTAKE_MOI = KilogramSquareMeters.of(0.001); //TODO
+
     }
 }
 

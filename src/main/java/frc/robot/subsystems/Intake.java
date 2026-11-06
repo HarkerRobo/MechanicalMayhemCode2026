@@ -40,6 +40,8 @@ public class Intake extends SubsystemBase
     {
         left = new TalonFX(Constants.Intake.LEFT_ID, Constants.CAN_SUPERSTRUCTURE);
         right = new TalonFX(Constants.Intake.RIGHT_ID, Constants.CAN_SUPERSTRUCTURE);
+
+        
         
         config();
     }
@@ -263,7 +265,6 @@ public class Intake extends SubsystemBase
         
     }
     
-
     /**
      * Returns true if the subsystem is disabled.
      * Prevents motor commands from being applied.
