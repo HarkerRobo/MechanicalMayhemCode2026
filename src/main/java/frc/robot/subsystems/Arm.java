@@ -173,6 +173,10 @@ public class Arm extends SubsystemBase {
         return master.getPosition().getValue();
     }
 
+    public void setAngle(Angle newAngle) {
+        master.setPosition(newAngle);
+    }
+
     public TalonFX getMasterMotor() {
         return master;
     }
