@@ -23,8 +23,12 @@ public class Telemetry {
 
 
     private NetworkTable intakeTable = table.getSubTable("Intake");
+    private DoublePublisher intakePositionRight = intakeTable.getDoubleTopic("Intake Position Right").publish();
+    private DoublePublisher intakePositionLeft = intakeTable.getDoubleTopic("Intake Position Left").publish();
     private DoublePublisher intakeVelocityRight = intakeTable.getDoubleTopic("Intake Velocity Right").publish();
     private DoublePublisher intakeVelocityLeft = intakeTable.getDoubleTopic("Intake Velocity Left").publish();
+    private DoublePublisher intakeVoltageRight = intakeTable.getDoubleTopic("Intake Voltage Right").publish();
+    private DoublePublisher intakeVoltageLeft = intakeTable.getDoubleTopic("Intake Voltage Left").publish();
     
     private Telemetry() 
     {
@@ -36,8 +40,13 @@ public class Telemetry {
         armPosition.set(Arm.getInstance().getCurrentAngle().in(Degrees));
         armVelocity.set(Arm.getInstance().getVelocity().in(DegreesPerSecond));
         armVoltage.set(Arm.getInstance().getVoltage().in(Volts));
-        intakeVelocityLeft.set(Intake.getInstance().getLeftVoltage().in(Volts));
-        intakeVelocityRight.set(Intake.getInstance().getRightVoltage().in(Volts));
+
+        intakePositionLeft.set(Intake.getInstance().getLeftPosition().in(Degrees));
+        intakePositionRight.set(Intake.getInstance().getRightPosition().in(Degrees));
+        intakeVelocityLeft.set(Intake.getInstance().getLeftVelocity().in(DegreesPerSecond));
+        intakeVelocityRight.set(Intake.getInstance().getRightVelocity().in(DegreesPerSecond));
+        intakeVoltageLeft.set(Intake.getInstance().getLeftVoltage().in(Volts));
+        intakeVoltageRight.set(Intake.getInstance().getRightVoltage().in(Volts));
     }
 
     public static Telemetry getInstance ()

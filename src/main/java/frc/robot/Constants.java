@@ -109,11 +109,15 @@ public final class Constants
 
         public static final double KP = 1;
         public static final double KI = 0;
-        public static final double KD = 0;
+        public static final double KD = 0; //taddy is a goon - rex
 
         public static final double KA = 1;
         public static final double KS = 1;
         public static final double KV = 1;
+
+        
+        public static final Velocity<VoltageUnit> QUASI_RAMP_RATE = Volts.of(0.5).per(Second);
+        public static final Voltage DYNAMIC_STEP_VOLTAGE = Volts.of(0.35);
 
         public static final Current STALLING_CURRENT = Amps.of(30.0);
         public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(60);

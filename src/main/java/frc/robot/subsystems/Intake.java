@@ -4,7 +4,7 @@ import edu.wpi.first.units.measure.*;
 import static edu.wpi.first.units.Units.*;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
@@ -18,6 +18,7 @@ import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
+import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
 import edu.wpi.first.math.system.plant.LinearSystemId;
 import frc.robot.RobotContainer.SubsystemStatus;
 
@@ -29,6 +30,7 @@ public class Intake extends SubsystemBase
     private TalonFX left;
     private TalonFX right;
     private static Intake instance;
+    private SysIdRoutine routine;
 
     private AngularVelocity targetVelocity = RotationsPerSecond.of(0.0);
 
@@ -40,7 +42,7 @@ public class Intake extends SubsystemBase
     {
         left = new TalonFX(Constants.Intake.LEFT_ID, Constants.CAN_SUPERSTRUCTURE);
         right = new TalonFX(Constants.Intake.RIGHT_ID, Constants.CAN_SUPERSTRUCTURE);
-
+        
         
         
         config();
@@ -54,6 +56,8 @@ public class Intake extends SubsystemBase
 
     private void config()
     {
+        routine = new SysIdRoutine(new SysIdRoutine.Config(Constants.Intake.QUASI_RAMP_RATE, Constants.Intake.DYNAMIC_STEP_VOLTAGE, null), 
+                                    new SysIdRoutine.Mechanism((Voltage v) -> left.setControl(new VoltageOut(v)), (SysIdRoutineLog l) -> l.motor("Intake").voltage(getVoltage()).angularPosition(getLeftPosition()).angularVelocity(getVelocity()), this));
         left.clearStickyFaults();
         right.clearStickyFaults();
 
@@ -191,6 +195,23 @@ public class Intake extends SubsystemBase
         return Math.abs(left.getStatorCurrent().getValueAsDouble()) >= Constants.Intake.STALLING_CURRENT.in(Amps) ||
             Math.abs(right.getStatorCurrent().getValueAsDouble()) >= Constants.Intake.STALLING_CURRENT.in(Amps);
     }
+
+     /**
+     * Gets the angle of the left
+     */
+    public Angle getLeftPosition()
+    {
+        return left.getPosition().getValue();
+    }
+
+    /**
+     * Gets the angle of the right
+     */
+    public Angle getRightPosition()
+    {
+        return right.getPosition().getValue();
+    }
+
     
     /**
     * Pushes a specific voltage into the motor.
@@ -254,6 +275,39 @@ public class Intake extends SubsystemBase
             simState.setRotorVelocity(motorSim.getAngularVelocity().times(Constants.Intake.RIGHT_GEAR_RATIO));
         }
     }
+
+     /**
+     * Returns the right motor voltage.
+     */
+    public Voltage getVoltage()
+    {
+        return left.getMotorVoltage().getValue();
+    }
+    
+    public SysIdRoutine getRoutine()
+    {
+        return routine;
+    }
+    
+    /**
+     * Returns the right motor velocity.
+     * Represents the measured angular speed of the intake.
+     */
+    public AngularVelocity getVelocity()
+    {
+        return left.getVelocity().getValue();
+    }
+
+    /**
+     * Returns the right stator current.
+     * Indicates the electrical load on the motor.
+     */
+    public Current getStatorCurrent()
+    {
+        return left.getStatorCurrent().getValue();
+    }
+    
+
    
     /**
      * Returns true if the subsystem is running in simulation.

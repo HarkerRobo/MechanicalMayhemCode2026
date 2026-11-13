@@ -26,7 +26,7 @@ import frc.robot.subsystems.Intake;
 /**
  * 
  */
-public class RobotContainer {    
+public class RobotContainer {
     // Replace with CommandPS4Controller or CommandJoystick if needed
     public final CommandXboxController driver =
         new CommandXboxController(OperatorConstants.kDriverControllerPort);
@@ -85,10 +85,15 @@ public class RobotContainer {
         //     ).withName("SwerveManual"));
         if (DO_SYID_CONTROLS)
         {
-            driver.button(1).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kForward)); 
-            driver.button(2).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kReverse));
-            driver.button(3).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kForward)); 
-            driver.button(4).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kReverse)); 
+            //driver.button(1).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kForward)); 
+            //driver.button(2).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kReverse));
+            //driver.button(3).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kForward)); 
+            //driver.button(4).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kReverse)); 
+
+            driver.button(1).whileTrue(Intake.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kForward)); 
+            driver.button(2).whileTrue(Intake.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kReverse));
+            driver.button(3).whileTrue(Intake.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kForward)); 
+            driver.button(4).whileTrue(Intake.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kReverse)); 
         }
         else
         {
