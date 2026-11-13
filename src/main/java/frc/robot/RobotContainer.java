@@ -92,14 +92,16 @@ public class RobotContainer {
                 .alongWith(new StartRunIntake()));
 
         // Score
-        driver.rightTrigger().onTrue(new ReverseIntake());
+        driver.rightTrigger().whileTrue(new ReverseIntake());
+
+        driver.rightTrigger().onFalse(new StartDefaultIntake());
 
         // Stow
         driver.leftBumper().onTrue(new MoveToAngle(Constants.Arm.ZERO_ARM));
 
         driver.x().onTrue(new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
         driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE));
-        driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
+        //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
 
         driver.povUp().whileTrue(new ArmUp().andThen(new StartRunIntake()));
         driver.povDown().whileTrue(new ArmDown().andThen(new StartRunIntake()));
