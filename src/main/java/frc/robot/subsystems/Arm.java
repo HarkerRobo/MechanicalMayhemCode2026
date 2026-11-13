@@ -95,6 +95,7 @@ public class Arm extends SubsystemBase {
         config.MotorOutput.Inverted = Constants.Arm.INVERTED;
 
         master.getConfigurator().apply(config);
+        follower.getConfigurator().apply(config);
         follower.setControl(new Follower(Constants.Arm.MASTER_ID, Constants.Arm.MOTOR_ALIGNMENT));
     }
 

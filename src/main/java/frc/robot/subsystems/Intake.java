@@ -34,8 +34,11 @@ public class Intake extends SubsystemBase
 
     private AngularVelocity targetVelocity = RotationsPerSecond.of(0.0);
 
-    private DCMotorSim motorSim = new DCMotorSim(
+    private DCMotorSim leftMotorSim = new DCMotorSim(
         LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), 0.001, Constants.Intake.LEFT_GEAR_RATIO),
+        DCMotor.getKrakenX60Foc(1));
+    private DCMotorSim rightMotorSim = new DCMotorSim(
+        LinearSystemId.createDCMotorSystem(DCMotor.getKrakenX60Foc(1), 0.001, Constants.Intake.RIGHT_GEAR_RATIO),
         DCMotor.getKrakenX60Foc(1));
     
     private Intake()
@@ -88,6 +91,7 @@ public class Intake extends SubsystemBase
         config.MotorOutput.Inverted = Constants.Intake.LEFT_INVERTED;
 
         left.getConfigurator().apply(config);
+        right.getConfigurator().apply(config);
         right.setControl(new Follower(Constants.Intake.LEFT_ID, Constants.Intake.MOTOR_ALIGNMENT));
         // left.clearStickyFaults();
         // right.clearStickyFaults();
@@ -258,21 +262,27 @@ public class Intake extends SubsystemBase
 
         if (isSimulated())
         {
-            TalonFXSimState simState = left.getSimState();
+            TalonFXSimState leftSimState = left.getSimState();
+            TalonFXSimState rightSimState = right.getSimState();
 
             // set the supply voltage of the TalonFX
-            simState.setSupplyVoltage(RobotController.getBatteryVoltage());
+            leftSimState.setSupplyVoltage(RobotController.getBatteryVoltage());
+            rightSimState.setSupplyVoltage(RobotController.getBatteryVoltage());
 
             // use the motor voltage to calculate new position and velocity
             // using WPILib's DCMotorSim class for physics simulation
-            motorSim.setInputVoltage(simState.getMotorVoltageMeasure().in(Volts));
-            motorSim.update(0.020); // assume 20 ms loop time
+            leftMotorSim.setInputVoltage(leftSimState.getMotorVoltageMeasure().in(Volts));
+            leftMotorSim.update(0.020); // assume 20 ms loop time
+            rightMotorSim.setInputVoltage(rightSimState.getMotorVoltageMeasure().in(Volts));
+            rightMotorSim.update(0.020); // assume 20 ms loop time
 
             // apply the new rotor position and velocity to the TalonFX;
             // note that this is rotor position/velocity (before gear ratio), but
             // DCMotorSim returns mechanism position/velocity (after gear ratio)
-            simState.setRawRotorPosition(motorSim.getAngularPosition().times(Constants.Intake.RIGHT_GEAR_RATIO));
-            simState.setRotorVelocity(motorSim.getAngularVelocity().times(Constants.Intake.RIGHT_GEAR_RATIO));
+            leftSimState.setRawRotorPosition(leftMotorSim.getAngularPosition().times(Constants.Intake.LEFT_GEAR_RATIO));
+            leftSimState.setRotorVelocity(leftMotorSim.getAngularVelocity().times(Constants.Intake.LEFT_GEAR_RATIO));
+            rightSimState.setRawRotorPosition(rightMotorSim.getAngularPosition().times(Constants.Intake.RIGHT_GEAR_RATIO));
+            rightSimState.setRotorVelocity(rightMotorSim.getAngularVelocity().times(Constants.Intake.RIGHT_GEAR_RATIO));
         }
     }
 
