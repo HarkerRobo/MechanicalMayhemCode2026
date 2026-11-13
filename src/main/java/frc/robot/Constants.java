@@ -60,8 +60,8 @@ public final class Constants
         public static final Angle MIN_ANGLE = Radians.of(0);
         public static final Angle STARTING_SIM_ANGLE = Degrees.of(45); //TODO very fake number
 
-        public static final Velocity<VoltageUnit> QUASI_RAMP_RATE = Volts.of(1).per(Second);
-        public static final Voltage DYNAMIC_STEP_VOLTAGE = Volts.of(1);
+        public static final Velocity<VoltageUnit> QUASI_RAMP_RATE = Volts.of(0.5).per(Second);
+        public static final Voltage DYNAMIC_STEP_VOLTAGE = Volts.of(0.35);
 
         public static final int MASTER_ID = 0;
         public static final int FOLLOWER_ID = 1;

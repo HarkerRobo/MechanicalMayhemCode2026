@@ -33,6 +33,7 @@ public class RobotContainer {
 
     public static int INTAKE_INDEX = 0;
     public static int ARM_INDEX = 1;
+    public static boolean DO_SYID_CONTROLS = false;
 
     //public final CommandSwerveDrivetrain drivetrain = Modules.createDrivetrain();
 
@@ -82,36 +83,40 @@ public class RobotContainer {
         //         .withVelocityY(-driver.getLeftX() * MaxSpeed.in(MetersPerSecond) * (isSlow ? Constants.TRANSLATION_SLOW_MULTIPLIER : 1.0)/*)*/) // Drive left with negative X (left)
         //         .withRotationalRate(-driver.getRightX() * MaxAngularRate.in(RadiansPerSecond) * (isSlow ? Constants.ROTATION_SLOW_MULTIPLIER : 1.0)) // Drive counterclockwise with negative X (left)
         //     ).withName("SwerveManual"));
-        
-        Arm.getInstance().setDefaultCommand(new ArmDefault()); 
-        Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
+        if (DO_SYID_CONTROLS)
+        {
+            driver.button(1).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kForward)); 
+            driver.button(2).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kReverse));
+            driver.button(3).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kForward)); 
+            driver.button(4).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kReverse)); 
+        }
+        else
+        {
+            Arm.getInstance().setDefaultCommand(new ArmDefault()); 
+            Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
 
-        // Deploy
-        driver.leftTrigger().onTrue(
-            new MoveToAngle(Constants.Arm.GROUND_ANGLE)
-                .alongWith(new StartRunIntake()));
+            // Deploy
+            driver.leftTrigger().onTrue(
+                new MoveToAngle(Constants.Arm.GROUND_ANGLE)
+                    .alongWith(new StartRunIntake()));
 
-        // Score
-        driver.rightTrigger().whileTrue(new ReverseIntake());
+            // Score
+            driver.rightTrigger().whileTrue(new ReverseIntake());
 
-        driver.rightTrigger().onFalse(new StartDefaultIntake());
+            driver.rightTrigger().onFalse(new StartDefaultIntake());
 
-        // Stow
-        driver.leftBumper().onTrue(new MoveToAngle(Constants.Arm.ZERO_ARM));
+            // Stow
+            driver.leftBumper().onTrue(new MoveToAngle(Constants.Arm.ZERO_ARM));
 
-        driver.x().onTrue(new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
-        driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE));
-        //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
+            driver.x().onTrue(new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
+            driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE));
+            //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
 
-        driver.povUp().whileTrue(new ArmUp().andThen(new StartRunIntake()));
-        driver.povDown().whileTrue(new ArmDown().andThen(new StartRunIntake()));
-        //driver.povLeft().onTrue(new ZeroDrive()); //zero drive which is todo 
-        driver.povRight().onTrue(new ZeroArm());
-        
-        // driver.button(1).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kForward)); 
-        // driver.button(2).whileTrue(Arm.getInstance().getRoutine().dynamic(SysIdRoutine.Direction.kReverse));
-        // driver.button(3).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kForward)); 
-        // driver.button(4).whileTrue(Arm.getInstance().getRoutine().quasistatic(SysIdRoutine.Direction.kReverse));                                              
+            driver.povUp().whileTrue(new ArmUp().andThen(new StartRunIntake()));
+            driver.povDown().whileTrue(new ArmDown().andThen(new StartRunIntake()));
+            //driver.povLeft().onTrue(new ZeroDrive()); //zero drive which is todo 
+            driver.povRight().onTrue(new ZeroArm());
+        }
     }
                     
     /*public Command getAutonomousCommand()
