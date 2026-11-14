@@ -28,6 +28,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVelocityVoltage;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
@@ -39,6 +40,7 @@ public class Arm extends SubsystemBase {
     private TalonFX master;
     private TalonFX follower;
     private SysIdRoutine routine;
+    private Angle desired;
 
     
 
@@ -56,7 +58,7 @@ public class Arm extends SubsystemBase {
             master.getSimState().Orientation = Constants.Arm.MECHANICAL_ORIENTATION;
             master.getSimState().setMotorType(TalonFXSimState.MotorType.KrakenX60);
         }
-
+        desired = Degrees.of(0.0);
         config();
     }
 
@@ -162,7 +164,13 @@ public class Arm extends SubsystemBase {
     */
     public void setVelocity(AngularVelocity velocity)
     {
-        master.setControl(new VelocityVoltage(velocity));
+        master.setControl(new VelocityVoltage(velocity.in(RotationsPerSecond)));
+    }
+
+    public void moveToAngle(Angle desired)
+    {
+        this.desired = desired;
+        master.setControl(new MotionMagicVoltage(desired.in(Rotations)));
     }
 
     /**
@@ -170,8 +178,15 @@ public class Arm extends SubsystemBase {
      */
     public Angle getCurrentAngle()
     {
-        System.out.println("Thing:" + master.getPosition().getValue().in(Degrees));
         return master.getPosition().getValue();
+    }
+
+    /**
+     * Gets the angle
+     */
+    public Angle getDesired()
+    {
+        return desired;
     }
 
     public void setAngle(Angle newAngle) {

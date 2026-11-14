@@ -56,7 +56,7 @@ public class RobotContainer {
         //         .andThen(drivetrain.runOnce(() -> drivetrain.resetPose(
         //                     (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
         //                     FlippingUtil.flipFieldPose(Constants.ZEROING_POSE) : Constants.ZEROING_POSE))));
-        NamedCommands.registerCommand("FirstShelf", new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE).asProxy());
+        NamedCommands.registerCommand("FirstShelf", new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
         NamedCommands.registerCommand("Stack", new MoveToAngle(Constants.Arm.STACK_ANGLE).asProxy());
         NamedCommands.registerCommand("TopShelf", new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).asProxy());
         NamedCommands.registerCommand("Zero Arm", new ZeroArm().asProxy());
@@ -103,24 +103,24 @@ public class RobotContainer {
             // Deploy
             driver.leftTrigger().onTrue(
                 new MoveToAngle(Constants.Arm.GROUND_ANGLE)
-                    .alongWith(new StartRunIntake()));
+                    .alongWith(new StartRunIntake()).withName("Intake/Ground"));
 
             // Score
-            driver.rightTrigger().whileTrue(new ReverseIntake());
+            driver.rightTrigger().whileTrue(new ReverseIntake().withName("Score"));
 
-            driver.rightTrigger().onFalse(new StartDefaultIntake());
+            //driver.rightTrigger().onFalse(new StartDefaultIntake());
 
             // Stow
-            driver.leftBumper().onTrue(new MoveToAngle(Constants.Arm.ZERO_ARM));
+            //driver.leftBumper().onTrue(new MoveToAngle(Constants.Arm.ZERO_ARM));
 
-            driver.x().onTrue(new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
-            driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE));
+            driver.x().onTrue(new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE).withName("Stow/First Shelf"));
+            driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).withName("Top Shelf/Stack"));
             //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
 
-            driver.povUp().whileTrue(new ArmUp().andThen(new StartRunIntake()));
-            driver.povDown().whileTrue(new ArmDown().andThen(new StartRunIntake()));
-            //driver.povLeft().onTrue(new ZeroDrive()); //zero drive which is todo 
-            driver.povRight().onTrue(new ZeroArm());
+            driver.povUp().whileTrue(new ArmUp().alongWith(new StartRunIntake()).withName("Intake Up Manual"));
+            driver.povDown().whileTrue(new ArmDown().alongWith(new StartRunIntake()).withName("Intake Down Manual"));
+            //driver.povLeft().onTrue(new ZeroDrive().withName("Zero Drive")); //zero drive which is todo 
+            driver.povRight().onTrue(new ZeroArm().withName("Zero Arm"));
         }
     }
                     

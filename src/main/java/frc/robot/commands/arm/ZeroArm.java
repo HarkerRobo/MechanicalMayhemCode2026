@@ -21,7 +21,7 @@ public class ZeroArm extends Command{
 
     public void execute()
     {
-        Arm.getInstance().setVoltage(Constants.Arm.DOWN_VOLTAGE);
+        Arm.getInstance().setVelocity(Constants.Arm.DOWN_VELOCITY);
     }
 
     public boolean isFinished()

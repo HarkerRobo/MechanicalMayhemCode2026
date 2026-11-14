@@ -82,11 +82,9 @@ public final class Constants
         public static final double KV = 5.73;
         public static final double KG = 0.245;
 
-        public static final Voltage UP_VOLTAGE = Volts.of(-20); //TODO
-        public static final Voltage DOWN_VOLTAGE = Volts.of(20); //TODO
         public static final Voltage DEFAULT_VOLTAGE = Volts.of(0); //TODO
         public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(50);
-        public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-50);
+        public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-50.0);
         
 
         public static final Angle GROUND_ANGLE = Degrees.of(0); //TODO
@@ -94,6 +92,7 @@ public final class Constants
         public static final Angle FIRST_SHELF_ANGLE = Degrees.of(20); // TODO
         public static final Angle STACK_ANGLE = Degrees.of(15); //TODO stacking on the first shelf 
         public static final Angle TOP_SHELF_ANGLE = Degrees.of(30); // TODO
+        public static final Angle ANGLE_TOLERANCE = Degrees.of(0.5);
     }
 
     public static class Intake

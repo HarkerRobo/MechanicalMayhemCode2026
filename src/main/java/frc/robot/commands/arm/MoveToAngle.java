@@ -26,11 +26,11 @@ public class MoveToAngle extends Command
 
     @Override
     public void execute() {
-        Arm.getInstance().setAngle(target);
+        Arm.getInstance().moveToAngle(target);
     }
 
     @Override
     public boolean isFinished() {
-        return Arm.getInstance().isStalling();
+        return Math.abs(Arm.getInstance().getCurrentAngle().in(Degrees) - Arm.getInstance().getDesired().in(Degrees)) < Constants.Arm.ANGLE_TOLERANCE.in(Degrees);
     }
 }
