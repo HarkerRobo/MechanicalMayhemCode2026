@@ -57,12 +57,12 @@ public class RobotContainer {
         //                     (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
         //                     FlippingUtil.flipFieldPose(Constants.ZEROING_POSE) : Constants.ZEROING_POSE))));
         NamedCommands.registerCommand("FirstShelf", new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
-        NamedCommands.registerCommand("Stack", new MoveToAngle(Constants.Arm.STACK_ANGLE).asProxy());
-        NamedCommands.registerCommand("TopShelf", new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).asProxy());
-        NamedCommands.registerCommand("Zero Arm", new ZeroArm().asProxy());
+        NamedCommands.registerCommand("Stack", new MoveToAngle(Constants.Arm.STACK_ANGLE));
+        NamedCommands.registerCommand("TopShelf", new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE));
+        NamedCommands.registerCommand("Zero Arm", new ZeroArm());
 
-        NamedCommands.registerCommand("StartIntake", new StartRunIntake().asProxy());
-        NamedCommands.registerCommand("ReverseIntake", new ReverseIntake().asProxy());        
+        NamedCommands.registerCommand("StartIntake", new StartRunIntake());
+        NamedCommands.registerCommand("ReverseIntake", new ReverseIntake());        
 
         
         configureBindings();
