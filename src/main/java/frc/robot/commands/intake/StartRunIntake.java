@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
+import static edu.wpi.first.units.Units.*;
 
 public class StartRunIntake extends Command 
 {
@@ -23,7 +24,7 @@ public class StartRunIntake extends Command
     @Override
     public void initialize()
     {
-        Robot.instance.robotContainer.driver.setRumble(RumbleType.kBothRumble, 0.5);
+        //Robot.instance.robotContainer.driver.setRumble(RumbleType.kBothRumble, 0.5);
         // Intake.getInstance().setVoltage(Volts.of(5.5));
         // if (DriverStation.isAutonomous())
         // {
@@ -31,7 +32,8 @@ public class StartRunIntake extends Command
         // }
         // else
         // {
-        Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
+        //Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
+        Intake.getInstance().setVoltage(Volts.of(10));
         // }
         System.out.println("intaking");
     }

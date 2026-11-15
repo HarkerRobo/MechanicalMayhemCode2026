@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.sim.*;
 
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -63,6 +64,8 @@ public class Robot extends TimedRobot {
 
         DataLogManager.start();
         DriverStation.startDataLog(DataLogManager.getLog());
+
+        SignalLogger.start();
     }
 
     /**

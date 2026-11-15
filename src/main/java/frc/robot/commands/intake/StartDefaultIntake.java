@@ -27,7 +27,7 @@ public class StartDefaultIntake extends Command
     @Override
     public void initialize()
     {
-        Robot.instance.robotContainer.driver.setRumble(RumbleType.kBothRumble, 0.0);
+        //Robot.instance.robotContainer.driver.setRumble(RumbleType.kBothRumble, 0.0);
         Intake.getInstance().setVoltage(Volts.zero());
         // Intake.getInstance().setVelocity(RotationsPerSecond.zero());
     }
