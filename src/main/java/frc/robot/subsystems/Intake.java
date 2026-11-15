@@ -42,10 +42,8 @@ public class Intake extends SubsystemBase
     
     private Intake()
     {
-        left = new TalonFX(Constants.Intake.LEFT_ID, Constants.CAN_SUPERSTRUCTURE);
-        right = new TalonFX(Constants.Intake.RIGHT_ID, Constants.CAN_SUPERSTRUCTURE);
-        
-        
+        left = new TalonFX(Constants.Intake.LEFT_ID, Constants.CAN_CHAIN);
+        right = new TalonFX(Constants.Intake.RIGHT_ID, Constants.CAN_CHAIN);
         
         config();
     }

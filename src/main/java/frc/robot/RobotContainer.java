@@ -4,13 +4,11 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.RotationsPerSecond;
-
 import java.util.ArrayList;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.util.FlippingUtil;
 import edu.wpi.first.hal.SimDevice.Direction;
@@ -19,6 +17,7 @@ import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.LinearVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -47,6 +46,9 @@ public class RobotContainer {
     public final CommandSwerveDrivetrain drivetrain = Modules.createDrivetrain();
 
     public enum SubsystemStatus {Enabled, Simulated, Disabled};
+    public ArrayList<SendableChooser<SubsystemStatus>> modeChoosers = new ArrayList<>();
+
+    private SendableChooser<Command> autonChooser;
 
     public LinearVelocity MaxSpeed = Swerve.kSpeedAt12Volts.times(1.0); // kSpeedAt12Volts desired top speed
     private AngularVelocity MaxAngularRate = RotationsPerSecond.of(0.75);
@@ -83,6 +85,9 @@ public class RobotContainer {
 
         
         configureBindings();
+
+        autonChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auton Chooser", autonChooser);
     }
 
     /**
@@ -156,7 +161,7 @@ public class RobotContainer {
         }
     }
                     
-    /*public Command getAutonomousCommand()
+    public Command getAutonomousCommand()
     {        
         return autonChooser.getSelected();
     }
@@ -164,5 +169,5 @@ public class RobotContainer {
     public SubsystemStatus getStatus(int subsystem)
     {
         return modeChoosers.get(subsystem).getSelected();
-    }*/
+    }
 }

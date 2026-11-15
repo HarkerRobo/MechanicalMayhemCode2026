@@ -36,7 +36,7 @@ import static edu.wpi.first.units.Units.*;
  */
 public final class Constants
 {
-    public static final CANBus CAN_SUPERSTRUCTURE = new CANBus("Superstructure");
+    //public static final CANBus CAN_SUPERSTRUCTURE = new CANBus("Superstructure");
     public static final CANBus CAN_CHAIN = new CANBus("rio");
 
     public static final double ROBOT_HEIGHT = 0.89535; //parallel to the intake face (TODO)
