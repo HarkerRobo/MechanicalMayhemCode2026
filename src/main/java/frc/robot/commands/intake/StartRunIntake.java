@@ -32,9 +32,9 @@ public class StartRunIntake extends Command
         // }
         // else
         // {
-        //Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
-        Intake.getInstance().setVoltage(Volts.of(10));
-        System.out.println("intaking");
+        Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
+        // Intake.getInstance().setVoltage(Volts.of(10));
+        // System.out.println("intaking");
     }
 
 
@@ -45,14 +45,5 @@ public class StartRunIntake extends Command
     public boolean isFinished () 
     {
         return true;
-    }
-
-    /**
-     * Nada
-     */
-    @Override
-    public void end (boolean interrupted) 
-    {
-        Intake.getInstance().setVoltage(Volts.zero());
     }
 }

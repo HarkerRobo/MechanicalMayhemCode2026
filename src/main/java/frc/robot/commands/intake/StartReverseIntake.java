@@ -32,10 +32,9 @@ public class StartReverseIntake extends Command
         // }
         // else
         // {
-        //Intake.getInstance().setVelocity(Constants.Intake.INTAKE_REVERSE_VELOCITY);
-        Intake.getInstance().setVoltage(Volts.of(-5));
+        Intake.getInstance().setVelocity(Constants.Intake.INTAKE_REVERSE_VELOCITY);
+        //Intake.getInstance().setVoltage(Volts.of(-5));
     }
-
 
     /**
      * Command finishes immediately.
@@ -44,14 +43,5 @@ public class StartReverseIntake extends Command
     public boolean isFinished () 
     {
         return true;
-    }
-
-    /**
-     * Nada
-     */
-    @Override
-    public void end (boolean interrupted) 
-    {
-        Intake.getInstance().setVoltage(Volts.zero());
     }
 }
