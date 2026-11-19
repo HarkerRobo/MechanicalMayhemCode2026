@@ -60,19 +60,6 @@ public class RobotContainer {
     public RobotContainer() {
 
         // Configure the trigger bindings
-        // NamedCommands.registerCommand("Zero Drivetrain", drivetrain.runOnce(() -> {
-        //         if (DriverStation.getAlliance().orElse(DriverStation.Alliance.Blue) == DriverStation.Alliance.Red)
-        //         {
-        //             drivetrain.seedFieldCentric(Rotation2d.k180deg);
-        //         }
-        //         else
-        //         {
-        //             drivetrain.seedFieldCentric();
-        //         }
-        //     })
-        //         .andThen(drivetrain.runOnce(() -> drivetrain.resetPose(
-        //                     (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
-        //                     FlippingUtil.flipFieldPose(Constants.ZEROING_POSE) : Constants.ZEROING_POSE))));
         
         NamedCommands.registerCommand("FirstShelf", new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
         NamedCommands.registerCommand("Stack", new MoveToAngle(Constants.Arm.STACK_ANGLE));
@@ -138,32 +125,32 @@ public class RobotContainer {
             Arm.getInstance().setDefaultCommand(new ArmDefault()); 
             //Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
 
-            // Deploy
-            // driver.leftTrigger().onTrue(
-            //     new MoveToAngle(Constants.Arm.GROUND_ANGLE)
-            //         .alongWith(new StartRunIntake()).withName("Intake/Ground"));
+            driver.leftTrigger().onTrue(
+                new MoveToAngle(Constants.Arm.GROUND_ANGLE)
+                    .alongWith(new StartRunIntake()).withName("Intake/Ground"));
             driver.b().onTrue(
                 new StartRunIntake());
             driver.b().onFalse(stow.get());
 
             // Score
-            driver.a().onTrue(new StartReverseIntake().withName("Score"));
-            driver.a().onFalse(stow.get());
+            driver.rightTrigger().onTrue(new StartReverseIntake().withName("Score"));
+            driver.rightTrigger().onFalse(stow.get());
             //driver.rightTrigger().onFalse(new StartDefaultIntake());
 
-            // Stow
-            //driver.leftBumper().onTrue(new MoveToAngle(Constants.Arm.ZERO_ARM));
-
-            //driver.x().onTrue(new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE).withName("Stow/First Shelf"));
-            //driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).withName("Top Shelf/Stack"));
-            //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
+            driver.x().onTrue(new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE).withName("Stow/First Shelf"));
+            driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).withName("Top Shelf/Stack"));
 
             driver.povUp().whileTrue(new ArmUp().alongWith(new StartRunIntake())
                                      .finallyDo(() -> stow.get().schedule()).withName("Intake Up Manual"));
             driver.povDown().whileTrue(new ArmDown().alongWith(new StartRunIntake())
                                        .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
             
-            //driver.povLeft().onTrue(new ZeroDrive().withName("Zero Drive")); //zero drive which is todo 
+            driver.povLeft().onTrue(
+                drivetrain.runOnce(() -> drivetrain.resetPose(
+                    (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
+                    FlippingUtil.flipFieldPose(Constants.ZEROING_POSE) : Constants.ZEROING_POSE))
+                    .withName("Zero Drivetrain")
+            ); //zero drive which is todo 
             driver.povRight().onTrue(new ZeroArm().withName("Zero A")); // zeros intake to stow position
         }
     }

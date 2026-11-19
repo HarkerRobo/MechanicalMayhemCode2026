@@ -219,9 +219,9 @@ public class Arm extends SubsystemBase {
             simState.setRawRotorPosition(Radians.of(motorSim.getAngleRads()).in(Rotations)*Constants.Arm.GEAR_RATIO);
             
             
-            System.out.println("Rads->Rot: " + Radians.of(motorSim.getAngleRads()).in(Rotations));
-            System.out.println("Sim: " + Radians.of(motorSim.getAngleRads()).in(Degrees));
-            System.out.println("Current: " + getCurrentAngle().in(Degrees));
+            // System.out.println("Rads->Rot: " + Radians.of(motorSim.getAngleRads()).in(Rotations));
+            // System.out.println("Sim: " + Radians.of(motorSim.getAngleRads()).in(Degrees));
+            // System.out.println("Current: " + getCurrentAngle().in(Degrees));
 
 
             simState.setRotorVelocity(RadiansPerSecond.of(motorSim.getVelocityRadPerSec()).in(RotationsPerSecond)*Constants.Arm.GEAR_RATIO);
