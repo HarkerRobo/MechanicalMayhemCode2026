@@ -45,9 +45,6 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = Modules.createDrivetrain();
 
-    public enum SubsystemStatus {Enabled, Simulated, Disabled};
-    public ArrayList<SendableChooser<SubsystemStatus>> modeChoosers = new ArrayList<>();
-
     private SendableChooser<Command> autonChooser;
 
     public LinearVelocity MaxSpeed = Swerve.kSpeedAt12Volts.times(1.0); // kSpeedAt12Volts desired top speed
@@ -166,8 +163,4 @@ public class RobotContainer {
         return autonChooser.getSelected();
     }
 
-    public SubsystemStatus getStatus(int subsystem)
-    {
-        return modeChoosers.get(subsystem).getSelected();
-    }
 }

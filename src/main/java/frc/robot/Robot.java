@@ -32,7 +32,6 @@ public class Robot extends TimedRobot {
 
     public final RobotContainer robotContainer;
     public static Robot instance;
-    private final DCMotorSim intakeMotorSim;
 
     Mechanism2d armMechanism = new Mechanism2d(20, 20);
     MechanismRoot2d armroot = armMechanism.getRoot("arm", 2, 2);
@@ -51,14 +50,6 @@ public class Robot extends TimedRobot {
         
         robotContainer = new RobotContainer();
         instance = this;
-
-
-        intakeMotorSim = new DCMotorSim( //x60 for intake
-            LinearSystemId.createDCMotorSystem(
-                DCMotor.getKrakenX60Foc(1), Constants.Intake.INTAKE_MOI.in(KilogramSquareMeters), Constants.Intake.LEFT_GEAR_RATIO
-            ),
-            DCMotor.getKrakenX60Foc(1)
-        );   
 
         SmartDashboard.putData("Mech2d", armMechanism);
 
@@ -144,23 +135,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically whilst in simulation. */
     @Override
     public void simulationPeriodic() {
-        // Get arm voltage
-        // Voltage motorVoltage = Arm.getInstance().getVoltage();
-
-        // // use the motor voltage to calculate new position and velocity
-        // // using WPILib's DCMotorSim class for physics simulation
-        // armMotorSim.setInputVoltage(motorVoltage.in(Volts));
-        //armMotorSim.update(0.020); // assume 20 ms loop time
-
-        // apply the new rotor position and velocity to the TalonFX;
-        // note that this is rotor position/velocity (before gear ratio), but
-        // DCMotorSim returns mechanism position/velocity (after gear ratio)
-        // armSim.setRawRotorPosition(armMotorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO));
-        // armSim.setRotorVelocity(armMotorSim.getAngularVelocity().times(Constants.Arm.GEAR_RATIO));
-
-        Telemetry.getInstance().update();
-
-        //arm.setAngle(armMotorSim.getAngularPosition().times(Constants.Arm.GEAR_RATIO).in(Degrees));
+        
     }
 
     public static Robot getInstance() {
@@ -168,12 +143,4 @@ public class Robot extends TimedRobot {
         return instance;
     }
     
-    //public DCMotorSim getArmMotorSim() {
-       // return armMotorSim;
-    //}
-    
-    public DCMotorSim getIntakeMotorSim() {
-        return intakeMotorSim;
-    }
-
 }

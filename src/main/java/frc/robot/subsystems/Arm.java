@@ -196,10 +196,6 @@ public class Arm extends SubsystemBase {
         return master;
     }
 
-    public Pose3d[] getSimPoses() {
-        return null;
-    }
-
     public void periodic() {
         if(isSimulated())
         {
