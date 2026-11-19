@@ -7,12 +7,12 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
 import static edu.wpi.first.units.Units.*;
 
-public class ReverseIntake extends Command 
+public class StartReverseIntake extends Command 
 {
     /**
      * Claims subsys.
      */
-    public ReverseIntake() 
+    public StartReverseIntake() 
     {
         addRequirements(Intake.getInstance());
     }
@@ -43,7 +43,7 @@ public class ReverseIntake extends Command
     @Override
     public boolean isFinished () 
     {
-        return false;
+        return true;
     }
 
     /**

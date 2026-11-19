@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -57,6 +58,7 @@ public class RobotContainer {
         .withDeadband(MaxSpeed.in(MetersPerSecond) * 0.1).withRotationalDeadband(MaxAngularRate.in(RadiansPerSecond) * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
+    private Supplier<Command> stow;
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
 
@@ -81,9 +83,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("Zero Arm", new ZeroArm());
 
         NamedCommands.registerCommand("StartIntake", new StartRunIntake());
-        NamedCommands.registerCommand("ReverseIntake", new ReverseIntake());        
+        NamedCommands.registerCommand("ReverseIntake", new StartReverseIntake());        
 
+        stow = ()->
+            new StartDefaultIntake()
+            .withName("Stow"); // must stay a supplier
         
+        NamedCommands.registerCommand("Stow", stow.get());
+
         configureBindings();
 
         autonChooser = AutoBuilder.buildAutoChooser();
@@ -114,7 +121,6 @@ public class RobotContainer {
         );
 
        
-
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
         
@@ -133,18 +139,19 @@ public class RobotContainer {
         else
         {
             Arm.getInstance().setDefaultCommand(new ArmDefault()); 
-            Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
+            //Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
 
             // Deploy
             // driver.leftTrigger().onTrue(
             //     new MoveToAngle(Constants.Arm.GROUND_ANGLE)
             //         .alongWith(new StartRunIntake()).withName("Intake/Ground"));
-            driver.b().whileTrue(
+            driver.b().onTrue(
                 new StartRunIntake());
+            driver.b().onFalse(stow.get());
 
             // Score
-            driver.a().whileTrue(new ReverseIntake().withName("Score"));
-
+            driver.a().onTrue(new StartReverseIntake().withName("Score"));
+            driver.a().onFalse(stow.get());
             //driver.rightTrigger().onFalse(new StartDefaultIntake());
 
             // Stow
@@ -154,10 +161,13 @@ public class RobotContainer {
             //driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).withName("Top Shelf/Stack"));
             //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
 
-            driver.povUp().whileTrue(new ArmUp().alongWith(new StartRunIntake()).withName("Intake Up Manual"));
-            driver.povDown().whileTrue(new ArmDown().alongWith(new StartRunIntake()).withName("Intake Down Manual"));
+            driver.povUp().whileTrue(new ArmUp().alongWith(new StartRunIntake())
+                                     .finallyDo(() -> stow.get().schedule()).withName("Intake Up Manual"));
+            driver.povDown().whileTrue(new ArmDown().alongWith(new StartRunIntake())
+                                       .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
+            
             //driver.povLeft().onTrue(new ZeroDrive().withName("Zero Drive")); //zero drive which is todo 
-            driver.povRight().onTrue(new ZeroArm().withName("Zero Arm"));
+            driver.povRight().onTrue(new ZeroArm().withName("Zero A")); // zeros intake to stow position
         }
     }
                     

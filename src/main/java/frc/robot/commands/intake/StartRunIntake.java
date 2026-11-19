@@ -34,7 +34,6 @@ public class StartRunIntake extends Command
         // {
         //Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
         Intake.getInstance().setVoltage(Volts.of(10));
-        // }
         System.out.println("intaking");
     }
 
@@ -45,7 +44,7 @@ public class StartRunIntake extends Command
     @Override
     public boolean isFinished () 
     {
-        return false;
+        return true;
     }
 
     /**
