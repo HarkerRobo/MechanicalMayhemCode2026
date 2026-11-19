@@ -329,8 +329,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                         // PID constants for translation
                         new PIDConstants(Constants.Swerve.AUTOALIGN_DRIVE_KP, Constants.Swerve.AUTOALIGN_DRIVE_KI, Constants.Swerve.AUTOALIGN_DRIVE_KD),
                         // PID constants for rotation
-                        new PIDConstants(Constants.Swerve.AUTOALIGN_STEER_KP, Constants.Swerve.AUTOALIGN_STEER_KP, Constants.Swerve.AUTOALIGN_STEER_KD)),
-                    config, (BooleanSupplier) () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red);
+                        new PIDConstants(Constants.Swerve.AUTOALIGN_STEER_KP, Constants.Swerve.AUTOALIGN_STEER_KI, Constants.Swerve.AUTOALIGN_STEER_KD)),
+                    config, (BooleanSupplier) () -> DriverStation.getAlliance().orElse(Alliance.Blue) == Alliance.Red, this);
             
         } catch (Exception e) {
             DriverStation.reportError("Failed to load PathPlanner config and configure AutoBuilder",

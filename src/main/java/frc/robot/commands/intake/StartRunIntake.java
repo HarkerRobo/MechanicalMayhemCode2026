@@ -53,6 +53,5 @@ public class StartRunIntake extends Command
     @Override
     public void end (boolean interrupted) 
     {
-        Intake.getInstance().setVoltage(Volts.zero());
     }
 }

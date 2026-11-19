@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -55,6 +56,9 @@ public class RobotContainer {
         .withDeadband(MaxSpeed.in(MetersPerSecond) * 0.1).withRotationalDeadband(MaxAngularRate.in(RadiansPerSecond) * 0.1) // Add a 10% deadband
         .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
 
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+
+        
     private Supplier<Command> stow;
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -74,13 +78,13 @@ public class RobotContainer {
         //                     (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
         //                     FlippingUtil.flipFieldPose(Constants.ZEROING_POSE) : Constants.ZEROING_POSE))));
         
-        NamedCommands.registerCommand("FirstShelf", new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE));
-        NamedCommands.registerCommand("Stack", new MoveToAngle(Constants.Arm.STACK_ANGLE));
-        NamedCommands.registerCommand("TopShelf", new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE));
-        NamedCommands.registerCommand("Zero Arm", new ZeroArm());
+        NamedCommands.registerCommand("FirstShelf", new MoveToAngle(Constants.Arm.FIRST_SHELF_ANGLE).withTimeout(1.5));
+        NamedCommands.registerCommand("Stack", new MoveToAngle(Constants.Arm.STACK_ANGLE).withTimeout(1.5));
+        NamedCommands.registerCommand("TopShelf", new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).withTimeout(1.5));
+        NamedCommands.registerCommand("Zero Arm", new ZeroArm().withTimeout(3.0));
 
         NamedCommands.registerCommand("StartIntake", new StartRunIntake());
-        NamedCommands.registerCommand("ReverseIntake", new StartReverseIntake());        
+        NamedCommands.registerCommand("ReverseIntake", new StartReverseIntake());
 
         stow = ()->
             new StartDefaultIntake()
@@ -90,7 +94,9 @@ public class RobotContainer {
 
         configureBindings();
 
-        autonChooser = AutoBuilder.buildAutoChooser();
+        drivetrain.registerTelemetry(Telemetry.getInstance()::telemeterize);
+
+        autonChooser = AutoBuilder.buildAutoChooser(); //TODO add a default auton??
         SmartDashboard.putData("Auton Chooser", autonChooser);
     }
 
@@ -162,9 +168,10 @@ public class RobotContainer {
                                      .finallyDo(() -> stow.get().schedule()).withName("Intake Up Manual"));
             driver.povDown().whileTrue(new ArmDown().alongWith(new StartRunIntake())
                                        .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
-            
+            driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+            driver.x().whileTrue(drivetrain.applyRequest(() -> brake));
             //driver.povLeft().onTrue(new ZeroDrive().withName("Zero Drive")); //zero drive which is todo 
-            driver.povRight().onTrue(new ZeroArm().withName("Zero A")); // zeros intake to stow position
+            driver.povRight().onTrue(new ZeroArm().withName("Zero A").withTimeout(3.0)); // zeros intake to stow position
         }
     }
                     

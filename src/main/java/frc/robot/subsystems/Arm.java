@@ -18,6 +18,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.units.measure.*;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 import edu.wpi.first.wpilibj.sysid.SysIdRoutineLog;
@@ -60,6 +61,10 @@ public class Arm extends SubsystemBase {
         }
         desired = Degrees.of(0.0);
         config();
+
+        if (RobotBase.isReal()) {
+            master.setPosition(Constants.Arm.ZERO_ARM); //TODO THIS CONSTANT IS PROBABLY FAKE WHICH IS LOWKEY NOT GOOD 
+        }
     }
 
     private void config()
@@ -71,14 +76,11 @@ public class Arm extends SubsystemBase {
 
         TalonFXConfiguration config = new TalonFXConfiguration();
 
-        if (isSimulated())
-        {
-            config.CurrentLimits.StatorCurrentLimit = Constants.Arm.STATOR_CURRENT_LIMIT.in(Amps);
-            config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.CurrentLimits.StatorCurrentLimit = Constants.Arm.STATOR_CURRENT_LIMIT.in(Amps);
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
             
-            config.CurrentLimits.SupplyCurrentLimit = Constants.Arm.SUPPLY_CURRENT_LIMIT.in(Amps);
-            config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        }
+        config.CurrentLimits.SupplyCurrentLimit = Constants.Arm.SUPPLY_CURRENT_LIMIT.in(Amps);
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
 
         config.Feedback.SensorToMechanismRatio = Constants.Arm.GEAR_RATIO;
 
@@ -101,8 +103,14 @@ public class Arm extends SubsystemBase {
 
         config.MotorOutput.Inverted = Constants.Arm.INVERTED;
 
-        master.getConfigurator().apply(config);
         follower.getConfigurator().apply(config);
+
+        config.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ForwardSoftLimitThreshold = Constants.Arm.MAX_ANGLE.in(Rotations);
+        config.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+        config.SoftwareLimitSwitch.ReverseSoftLimitThreshold = Constants.Arm.MIN_ANGLE.in(Rotations);
+        master.getConfigurator().apply(config);
+
         follower.setControl(new Follower(Constants.Arm.MASTER_ID, Constants.Arm.MOTOR_ALIGNMENT));
     }
 
@@ -155,11 +163,6 @@ public class Arm extends SubsystemBase {
     */
     public void setVoltage (Voltage voltage)
     {
-        if (isDisabled())
-        {
-            System.out.println("Quashing input to Intake");
-            return;
-        }
         master.setControl(new VoltageOut(voltage));
     }
 

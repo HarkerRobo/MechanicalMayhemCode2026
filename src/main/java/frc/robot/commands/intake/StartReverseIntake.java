@@ -52,6 +52,5 @@ public class StartReverseIntake extends Command
     @Override
     public void end (boolean interrupted) 
     {
-        Intake.getInstance().setVoltage(Volts.zero());
     }
 }

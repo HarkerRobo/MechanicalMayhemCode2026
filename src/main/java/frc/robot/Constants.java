@@ -69,7 +69,7 @@ public final class Constants
 
         public static final Slot0Configs steerGains = new Slot0Configs()
         .withKP(100).withKI(0).withKD(0.5)
-        .withKS(-0.010835).withKV(-1.2157).withKA(0.065145) //ks and kv are negative fix later
+        .withKS(0).withKV(0).withKA(0) //ks and kv are 0 fix later
         .withStaticFeedforwardSign(StaticFeedforwardSignValue.UseClosedLoopSign);
         // When using closed-loop control, the drive motor uses the control
         // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
@@ -126,7 +126,7 @@ public final class Constants
         // Measured robot speed (m/s) at 12 V applied output;
         // This is NOT the desired max robot speed - see MaxSpeed in RobotContainer instead;
         // This needs to be tuned to your individual robot
-        public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(8.78);
+        public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.36);
 
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
         // This may need to be tuned to your individual robot

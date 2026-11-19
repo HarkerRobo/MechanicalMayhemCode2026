@@ -231,11 +231,6 @@ public class Intake extends SubsystemBase
     */
     public void setVoltage (Voltage voltage)
     {
-        if (isDisabled())
-        {
-            System.out.println("Quashing input to Intake");
-            return;
-        }
         left.setControl(new VoltageOut(voltage));
     }
 
@@ -246,10 +241,6 @@ public class Intake extends SubsystemBase
     public void setVelocity (AngularVelocity velocity)
     {
         targetVelocity = velocity;
-        if (isDisabled())
-        {
-            return;
-        }
         left.setControl(new VelocityVoltage(velocity));
         
     }
