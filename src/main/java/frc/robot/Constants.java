@@ -128,7 +128,7 @@ public final class Constants
 
         public static final double kDriveGearRatio = 7.03125;
         public static final double kSteerGearRatio = 26.09090909090909;
-        public static final Distance kWheelRadius = Inches.of(4);
+        public static final Distance kWheelRadius = Inches.of(2);
 
         public static final boolean kInvertLeftSide = false;
         public static final boolean kInvertRightSide = true;
@@ -228,6 +228,7 @@ public final class Constants
 
         public static final Velocity<VoltageUnit> QUASI_RAMP_RATE = Volts.of(0.5).per(Second);
         public static final Voltage DYNAMIC_STEP_VOLTAGE = Volts.of(0.35);
+        public static final Voltage ZEROING_VOLTAGE = Volts.of(-1.0); // TODO tune
 
         public static final int MASTER_ID = 15;
         public static final int FOLLOWER_ID = 16;
@@ -252,6 +253,9 @@ public final class Constants
         public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(50);
         public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-50.0);
         
+
+        public static final AngularVelocity CRUISE_VELOCITY = DegreesPerSecond.of(90); // TODO 
+        public static final AngularAcceleration MAX_ACCELERATION = DegreesPerSecondPerSecond.of(180); // TODO 
 
         public static final Angle GROUND_ANGLE = Degrees.of(0); //TODO
         public static final Angle ZERO_ARM = Degrees.of(10); //TODO when the intake is touching swerve modules  

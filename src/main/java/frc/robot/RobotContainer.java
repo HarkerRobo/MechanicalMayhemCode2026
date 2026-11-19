@@ -81,7 +81,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Zero Arm", new ZeroArm());
 
         NamedCommands.registerCommand("StartIntake", new StartRunIntake());
-        NamedCommands.registerCommand("ReverseIntake", new ReverseIntake());        
+        NamedCommands.registerCommand("ReverseIntake", new ReverseIntake().withTimeout(1.0));         
 
         
         configureBindings();

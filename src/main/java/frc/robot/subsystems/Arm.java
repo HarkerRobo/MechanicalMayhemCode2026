@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 
@@ -93,6 +94,11 @@ public class Arm extends SubsystemBase {
         config.Slot0.kV = Constants.Arm.KV;
         config.Slot0.kA = Constants.Arm.KA;
         config.Slot0.kG = Constants.Arm.KG;
+        config.Slot0.GravityType = GravityTypeValue.Arm_Cosine;
+
+        config.MotionMagic.MotionMagicCruiseVelocity = Constants.Arm.CRUISE_VELOCITY.in(RotationsPerSecond);
+        config.MotionMagic.MotionMagicAcceleration = Constants.Arm.MAX_ACCELERATION.in(RotationsPerSecondPerSecond);
+
         config.MotorOutput.Inverted = Constants.Arm.INVERTED;
 
         master.getConfigurator().apply(config);

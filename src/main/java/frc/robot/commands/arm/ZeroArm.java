@@ -21,7 +21,7 @@ public class ZeroArm extends Command{
 
     public void execute()
     {
-        Arm.getInstance().setVelocity(Constants.Arm.DOWN_VELOCITY);
+        Arm.getInstance().setVoltage(Constants.Arm.ZEROING_VOLTAGE);
     }
 
     public boolean isFinished()
@@ -31,6 +31,10 @@ public class ZeroArm extends Command{
 
     public void end(boolean interrupted)
     {
-        Arm.getInstance().setAngle(Constants.Arm.ZERO_ARM);
+        Arm.getInstance().setVoltage(Volts.zero());
+        if (!interrupted)
+        {
+            Arm.getInstance().setAngle(Constants.Arm.ZERO_ARM);
+        }
     }
 }
