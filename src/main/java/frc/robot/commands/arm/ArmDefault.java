@@ -17,15 +17,16 @@ public class ArmDefault extends Command
     }
 
     @Override
-    public void initialize() {
+    public void initialize() 
+    {
+        Arm.getInstance().moveToAngle(Arm.getInstance().getCurrentAngle());
     }
         
 
     @Override
-    public void execute() {
-        Arm.getInstance().setVoltage((Constants.Arm.DEFAULT_VOLTAGE));
+    public void execute() 
+    {
     }
-
     @Override
     public boolean isFinished() {
         return false;
