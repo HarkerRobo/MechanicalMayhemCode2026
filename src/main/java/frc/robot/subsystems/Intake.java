@@ -62,33 +62,44 @@ public class Intake extends SubsystemBase
         right.clearStickyFaults();
 
         TalonFXConfiguration config = new TalonFXConfiguration();
+        TalonFXConfiguration rightConfig = new TalonFXConfiguration();
 
-        if (isSimulated())
-        {
-            config.CurrentLimits.StatorCurrentLimit = Constants.Intake.STATOR_CURRENT_LIMIT.in(Amps);
-            config.CurrentLimits.StatorCurrentLimitEnable = true;
-            
-            config.CurrentLimits.SupplyCurrentLimit = Constants.Intake.SUPPLY_CURRENT_LIMIT.in(Amps);
-            config.CurrentLimits.SupplyCurrentLimitEnable = true;
-        }
+
+        config.CurrentLimits.StatorCurrentLimit = Constants.Intake.STATOR_CURRENT_LIMIT.in(Amps);
+        config.CurrentLimits.StatorCurrentLimitEnable = true;
+        config.CurrentLimits.SupplyCurrentLimit = Constants.Intake.SUPPLY_CURRENT_LIMIT.in(Amps);
+        config.CurrentLimits.SupplyCurrentLimitEnable = true;
+
+        rightConfig.CurrentLimits.StatorCurrentLimit = Constants.Intake.STATOR_CURRENT_LIMIT.in(Amps);
+        rightConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+        rightConfig.CurrentLimits.SupplyCurrentLimit = Constants.Intake.SUPPLY_CURRENT_LIMIT.in(Amps);
+        rightConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+
 
         config.Feedback.SensorToMechanismRatio = Constants.Intake.LEFT_GEAR_RATIO;
+        rightConfig.Feedback.SensorToMechanismRatio = Constants.Intake.RIGHT_GEAR_RATIO;
 
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        rightConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         config.Voltage.PeakForwardVoltage = Constants.MAX_VOLTAGE.in(Volts);
         config.Voltage.PeakReverseVoltage = -Constants.MAX_VOLTAGE.in(Volts);
         
+
+
+
         config.Slot0.kP = Constants.Intake.KP;
         config.Slot0.kI = Constants.Intake.KI;
         config.Slot0.kD = Constants.Intake.KD;
         config.Slot0.kS = Constants.Intake.KS;
         config.Slot0.kV = Constants.Intake.KV;
         config.Slot0.kA = Constants.Intake.KA;
+
         config.MotorOutput.Inverted = Constants.Intake.LEFT_INVERTED;
 
         left.getConfigurator().apply(config);
-        right.getConfigurator().apply(config);
+        right.getConfigurator().apply(rightConfig);
+
         right.setControl(new Follower(Constants.Intake.LEFT_ID, Constants.Intake.MOTOR_ALIGNMENT));
         // left.clearStickyFaults();
         // right.clearStickyFaults();
@@ -237,11 +248,9 @@ public class Intake extends SubsystemBase
         targetVelocity = velocity;
         if (isDisabled())
         {
-            System.out.println("Quashing input to Intake");
             return;
         }
         left.setControl(new VelocityVoltage(velocity));
-        System.out.print(velocity.in(DegreesPerSecond));
         
     }
     
@@ -284,7 +293,7 @@ public class Intake extends SubsystemBase
     }
 
      /**
-     * Returns the right motor voltage.
+     * Returns the left motor voltage.
      */
     public Voltage getVoltage()
     {
@@ -297,7 +306,7 @@ public class Intake extends SubsystemBase
     }
     
     /**
-     * Returns the right motor velocity.
+     * Returns the left motor velocity.
      * Represents the measured angular speed of the intake.
      */
     public AngularVelocity getVelocity()
@@ -306,7 +315,7 @@ public class Intake extends SubsystemBase
     }
 
     /**
-     * Returns the right stator current.
+     * Returns the left stator current.
      * Indicates the electrical load on the motor.
      */
     public Current getStatorCurrent()

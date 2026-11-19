@@ -289,7 +289,6 @@ public final class Constants
         public static final Current STATOR_CURRENT_LIMIT = Amps.of(80);
 
         public static final InvertedValue LEFT_INVERTED = InvertedValue.CounterClockwise_Positive;
-        public static final InvertedValue RIGHT_INVERTED = InvertedValue.CounterClockwise_Positive;
         public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Opposed;
 
         public static final ChassisReference MECHANICAL_ORIENTATION = ChassisReference.CounterClockwise_Positive;
