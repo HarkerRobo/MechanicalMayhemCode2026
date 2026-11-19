@@ -58,8 +58,14 @@ public final class Constants
     }
 
     public static class Swerve {
-        // IDS
-        public static final int PIGEON_ID =0;
+        //TODO very bad numbers
+        public static final double AUTOALIGN_STEER_KP = 13.0;
+        public static final double AUTOALIGN_STEER_KI = 0.0;
+        public static final double AUTOALIGN_STEER_KD = 0.0;
+        
+        public static final double AUTOALIGN_DRIVE_KP = 6.0;
+        public static final double AUTOALIGN_DRIVE_KI = 0.0;
+        public static final double AUTOALIGN_DRIVE_KD = 0.0;
 
         public static final Slot0Configs steerGains = new Slot0Configs()
         .withKP(100).withKI(0).withKD(0.5)
