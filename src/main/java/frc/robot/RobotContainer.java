@@ -172,7 +172,9 @@ public class RobotContainer {
                                        .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
             driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
             driver.x().whileTrue(drivetrain.applyRequest(() -> brake));
-            //driver.povLeft().onTrue(new ZeroDrive().withName("Zero Drive")); //zero drive which is todo 
+            driver.povLeft().onTrue(drivetrain.runOnce(() -> drivetrain.resetPose(
+                             (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
+                             FlippingUtil.flipFieldPose(Constants.ZEROING_POSE) : Constants.ZEROING_POSE)).withName("Zero Drive")); //zero drive which is todo 
             driver.povRight().onTrue(new ZeroArm().withName("Zero A").withTimeout(3.0)); // zeros intake to stow position
         }
     }
