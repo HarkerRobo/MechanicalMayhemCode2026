@@ -45,6 +45,8 @@ public class RobotContainer {
     public static int ARM_INDEX = 1;
     public static boolean DO_SYID_CONTROLS = false;
 
+    public static double slowMode = 1.0;
+
     public final CommandSwerveDrivetrain drivetrain = Modules.createDrivetrain();
 
     private SendableChooser<Command> autonChooser;
@@ -108,12 +110,16 @@ public class RobotContainer {
         // Uncomment once drivetrain code has been generated!
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+        driver.rightBumper().onTrue( Commands.runOnce(()->slowMode=0.3));
+        driver.rightBumper().onFalse( Commands.runOnce(()->slowMode=1.0));
+         
+
        drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(driver.getLeftY() *  MaxSpeed.in(MetersPerSecond)) // Drive forward with negative Y (forward)
-                    .withVelocityY(driver.getLeftX() *  MaxSpeed.in(MetersPerSecond)) // Drive left with negative X (left)
-                    .withRotationalRate(-driver.getRightX() * MaxAngularRate.in(RadiansPerSecond)) // Drive counterclockwise with negative X (left)
+                drive.withVelocityX(-driver.getLeftY() *  MaxSpeed.in(MetersPerSecond) * slowMode) // Drive forward with negative Y (forward)
+                    .withVelocityY(-driver.getLeftX() *  MaxSpeed.in(MetersPerSecond)* slowMode) // Drive left with negative X (left)
+                    .withRotationalRate(-driver.getRightX() * MaxAngularRate.in(RadiansPerSecond)* slowMode) // Drive counterclockwise with negative X (left)
             )
         );
         // Idle while the robot is disabled. This ensures the configured
