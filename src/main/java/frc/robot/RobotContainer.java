@@ -172,10 +172,10 @@ public class RobotContainer {
             //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
 
 
-            driver.rightBumper().whileTrue(new ArmUp()
-                                     .finallyDo(() -> stow.get().schedule()).withName("Intake Up Manual"));
-            driver.leftBumper().whileTrue(new ArmDown()
-                                       .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
+            //driver.rightBumper().whileTrue(new ArmUp()
+             //                        .finallyDo(() -> stow.get().schedule()).withName("Intake Up Manual"));
+            //driver.leftBumper().whileTrue(new ArmDown()
+             //                          .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
             driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
             driver.x().whileTrue(drivetrain.applyRequest(() -> brake));
             driver.povLeft().onTrue(drivetrain.runOnce(() -> drivetrain.resetPose(

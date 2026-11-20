@@ -126,7 +126,7 @@ public final class Constants
         // Measured robot speed (m/s) at 12 V applied output;
         // This is NOT the desired max robot speed - see MaxSpeed in RobotContainer instead;
         // This needs to be tuned to your individual robot
-        public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.36);
+        public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(2.00);
 
         // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
         // This may need to be tuned to your individual robot
