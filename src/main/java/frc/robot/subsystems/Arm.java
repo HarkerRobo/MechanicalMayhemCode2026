@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
@@ -42,6 +43,7 @@ public class Arm extends SubsystemBase {
     private TalonFX follower;
     private SysIdRoutine routine;
     private Angle desired;
+    private Debouncer debouncer;
 
     
 
@@ -65,6 +67,7 @@ public class Arm extends SubsystemBase {
         if (RobotBase.isReal()) {
             master.setPosition(Constants.Arm.ZERO_ARM); //TODO THIS CONSTANT IS PROBABLY FAKE WHICH IS LOWKEY NOT GOOD 
         }
+        debouncer = new Debouncer(0.2);
     }
 
     private void config()
@@ -84,7 +87,7 @@ public class Arm extends SubsystemBase {
 
         config.Feedback.SensorToMechanismRatio = Constants.Arm.GEAR_RATIO;
 
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         config.Voltage.PeakForwardVoltage = Constants.MAX_VOLTAGE.in(Volts);
         config.Voltage.PeakReverseVoltage = -Constants.MAX_VOLTAGE.in(Volts);
@@ -154,7 +157,7 @@ public class Arm extends SubsystemBase {
     
     public boolean isStalling()
     {
-        return Math.abs(master.getStatorCurrent().getValueAsDouble()) >= Constants.Arm.STALLING_CURRENT.in(Amps);
+        return debouncer.calculate(Math.abs(master.getStatorCurrent().getValueAsDouble()) >= Constants.Arm.STALLING_CURRENT.in(Amps));
     }
     
     /**

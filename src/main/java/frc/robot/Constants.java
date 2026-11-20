@@ -239,7 +239,7 @@ public final class Constants
         public static final int MASTER_ID = 15;
         public static final int FOLLOWER_ID = 16;
         public static final InvertedValue INVERTED = InvertedValue.CounterClockwise_Positive;
-        public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Opposed; //TODO
+        public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Aligned; //TODO
         public static final ChassisReference MECHANICAL_ORIENTATION = ChassisReference.CounterClockwise_Positive; // TODO
 
         public static final Current STALLING_CURRENT = Amps.of(10);
@@ -255,7 +255,8 @@ public final class Constants
         public static final double KV = 5.73;
         public static final double KG = 0.245;
 
-        public static final Voltage DEFAULT_VOLTAGE = Volts.of(0); //TODO
+        public static final Voltage UP_VOLTAGE = Volts.of(3); 
+        public static final Voltage DOWN_VOLTAGE = Volts.of(-3);
         public static final AngularVelocity UP_VELOCITY = DegreesPerSecond.of(50);
         public static final AngularVelocity DOWN_VELOCITY = DegreesPerSecond.of(-50.0);
         
@@ -273,8 +274,9 @@ public final class Constants
 
     public static class Intake
     {
-        public static final AngularVelocity INTAKE_VELOCITY = RotationsPerSecond.of(-10.0); // rot/s
-        public static final AngularVelocity INTAKE_REVERSE_VELOCITY = RotationsPerSecond.of(10.0); // TODO may be different rot/s
+        public static final AngularVelocity INTAKE_VELOCITY = RotationsPerSecond.of(-5.0); // rot/s
+        public static final AngularVelocity INTAKE_REVERSE_VELOCITY = RotationsPerSecond.of(5.0); // TODO may be different rot/s
+        public static final Voltage INTAKE_REVERSE_VOLTAGE = Volts.of(-1.4);
 
         public static final int LEFT_ID = 17;
         public static final int RIGHT_ID = 19;

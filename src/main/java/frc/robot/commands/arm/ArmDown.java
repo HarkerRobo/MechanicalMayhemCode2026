@@ -23,11 +23,12 @@ public class ArmDown extends Command
 
     @Override
     public void execute() {
-        Arm.getInstance().setVelocity(Constants.Arm.DOWN_VELOCITY);
+        //Arm.getInstance().setVelocity(Constants.Arm.DOWN_VELOCITY);
+        Arm.getInstance().setVoltage(Constants.Arm.DOWN_VOLTAGE);
     }
 
     @Override
     public boolean isFinished() {
-        return false;
+        return Arm.getInstance().isStalling();
     }
 }

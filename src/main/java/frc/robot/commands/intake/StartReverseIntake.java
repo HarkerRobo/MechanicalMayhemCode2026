@@ -33,7 +33,7 @@ public class StartReverseIntake extends Command
         // else
         // {
         //Intake.getInstance().setVelocity(Constants.Intake.INTAKE_REVERSE_VELOCITY);
-        Intake.getInstance().setVoltage(Volts.of(-5));
+        Intake.getInstance().setVoltage(Constants.Intake.INTAKE_REVERSE_VOLTAGE);
     }
 
 

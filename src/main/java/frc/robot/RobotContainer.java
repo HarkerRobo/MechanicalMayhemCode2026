@@ -49,7 +49,7 @@ public class RobotContainer {
 
     private SendableChooser<Command> autonChooser;
 
-    public LinearVelocity MaxSpeed = Swerve.kSpeedAt12Volts.times(1.0); // kSpeedAt12Volts desired top speed
+    public LinearVelocity MaxSpeed = Swerve.kSpeedAt12Volts.times(0.5); // kSpeedAt12Volts desired top speed
     private AngularVelocity MaxAngularRate = RotationsPerSecond.of(0.75);
 
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -111,8 +111,8 @@ public class RobotContainer {
        drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-driver.getLeftY() *  MaxSpeed.in(MetersPerSecond)) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driver.getLeftX() *  MaxSpeed.in(MetersPerSecond)) // Drive left with negative X (left)
+                drive.withVelocityX(driver.getLeftY() *  MaxSpeed.in(MetersPerSecond)) // Drive forward with negative Y (forward)
+                    .withVelocityY(driver.getLeftX() *  MaxSpeed.in(MetersPerSecond)) // Drive left with negative X (left)
                     .withRotationalRate(-driver.getRightX() * MaxAngularRate.in(RadiansPerSecond)) // Drive counterclockwise with negative X (left)
             )
         );
@@ -141,20 +141,21 @@ public class RobotContainer {
         }
         else
         {
-            Arm.getInstance().setDefaultCommand(new ArmDefault()); 
+            //Arm.getInstance().setDefaultCommand(new ArmDefault()); 
             //Intake.getInstance().setDefaultCommand(new StartDefaultIntake());
 
             // Deploy
             // driver.leftTrigger().onTrue(
+
             //     new MoveToAngle(Constants.Arm.GROUND_ANGLE)
             //         .alongWith(new StartRunIntake()).withName("Intake/Ground"));
-            driver.b().onTrue(
+            driver.rightTrigger().onTrue(
                 new StartRunIntake());
-            driver.b().onFalse(stow.get());
+            driver.rightTrigger().onFalse(stow.get());
 
             // Score
-            driver.a().onTrue(new StartReverseIntake().withName("Score"));
-            driver.a().onFalse(stow.get());
+            driver.leftTrigger().onTrue(new StartReverseIntake().withName("Score"));
+            driver.leftTrigger().onFalse(stow.get());
             //driver.rightTrigger().onFalse(new StartDefaultIntake());
 
             // Stow
@@ -164,9 +165,10 @@ public class RobotContainer {
             //driver.y().onTrue(new MoveToAngle(Constants.Arm.TOP_SHELF_ANGLE).withName("Top Shelf/Stack"));
             //driver.b().onTrue(new MoveToAngle(Constants.Arm.STACK_ANGLE));
 
-            driver.povUp().whileTrue(new ArmUp().alongWith(new StartRunIntake())
+
+            driver.rightBumper().whileTrue(new ArmUp()
                                      .finallyDo(() -> stow.get().schedule()).withName("Intake Up Manual"));
-            driver.povDown().whileTrue(new ArmDown().alongWith(new StartRunIntake())
+            driver.leftBumper().whileTrue(new ArmDown()
                                        .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
             driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
             driver.x().whileTrue(drivetrain.applyRequest(() -> brake));
