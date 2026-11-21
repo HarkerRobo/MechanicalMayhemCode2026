@@ -242,10 +242,10 @@ public final class Constants
         public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Aligned; //TODO
         public static final ChassisReference MECHANICAL_ORIENTATION = ChassisReference.CounterClockwise_Positive; // TODO
 
-        public static final Current STALLING_CURRENT = Amps.of(10);
+        public static final Current STALLING_CURRENT = Amps.of( 30);
         public static final double GEAR_RATIO = 48.0;
-        public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(60);
-        public static final Current STATOR_CURRENT_LIMIT = Amps.of(80);
+        public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(40);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(50);
 
         public static final double KP = 61.202;
         public static final double KI = 0;
@@ -296,9 +296,9 @@ public final class Constants
         public static final Velocity<VoltageUnit> QUASI_RAMP_RATE = Volts.of(0.5).per(Second);
         public static final Voltage DYNAMIC_STEP_VOLTAGE = Volts.of(0.35);
 
-        public static final Current STALLING_CURRENT = Amps.of(30.0);
-        public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(60);
-        public static final Current STATOR_CURRENT_LIMIT = Amps.of(80);
+        public static final Current STALLING_CURRENT = Amps.of(17.5);
+        public static final Current SUPPLY_CURRENT_LIMIT = Amps.of(20);
+        public static final Current STATOR_CURRENT_LIMIT = Amps.of(30);
 
         public static final InvertedValue LEFT_INVERTED = InvertedValue.CounterClockwise_Positive;
         public static final MotorAlignmentValue MOTOR_ALIGNMENT = MotorAlignmentValue.Opposed;
