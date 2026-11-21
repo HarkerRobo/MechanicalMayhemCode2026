@@ -274,8 +274,7 @@ public final class Constants
 
     public static class Intake
     {
-        public static final AngularVelocity INTAKE_VELOCITY = RotationsPerSecond.of(-5.0); // rot/s
-        public static final AngularVelocity INTAKE_REVERSE_VELOCITY = RotationsPerSecond.of(5.0); // TODO may be different rot/s
+        public static final Voltage INTAKE_VOLTAGE = Volts.of(7.0);
         public static final Voltage INTAKE_REVERSE_VOLTAGE = Volts.of(-1.4);
 
         public static final int LEFT_ID = 17;

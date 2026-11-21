@@ -155,13 +155,13 @@ public class RobotContainer {
 
             //     new MoveToAngle(Constants.Arm.GROUND_ANGLE)
             //         .alongWith(new StartRunIntake()).withName("Intake/Ground"));
-            driver.rightTrigger().onTrue(
+            driver.leftTrigger().onTrue(
                 new StartRunIntake());
-            driver.rightTrigger().onFalse(stow.get());
+            driver.leftTrigger().onFalse(stow.get());
 
             // Score
-            driver.leftTrigger().onTrue(new StartReverseIntake().withName("Score"));
-            driver.leftTrigger().onFalse(stow.get());
+            driver.rightTrigger().onTrue(new StartReverseIntake().withName("Score"));
+            driver.rightTrigger().onFalse(stow.get());
             //driver.rightTrigger().onFalse(new StartDefaultIntake());
 
             // Stow
@@ -177,7 +177,7 @@ public class RobotContainer {
             //driver.leftBumper().whileTrue(new ArmDown()
              //                          .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
             //driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
-            driver.x().whileTrue(drivetrain.applyRequest(() -> brake));
+            //driver.x().whileTrue(drivetrain.applyRequest(() -> brake));
             driver.povLeft().onTrue(drivetrain.runOnce(() -> drivetrain.resetPose(
                              (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
                              FlippingUtil.flipFieldPose(Constants.ZEROING_POSE) : Constants.ZEROING_POSE)).withName("Zero Drive")); //zero drive which is todo 

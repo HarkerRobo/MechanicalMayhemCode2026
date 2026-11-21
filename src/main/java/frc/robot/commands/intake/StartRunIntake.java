@@ -33,7 +33,7 @@ public class StartRunIntake extends Command
         // else
         // {
         //Intake.getInstance().setVelocity(Constants.Intake.INTAKE_VELOCITY);
-        Intake.getInstance().setVoltage(Volts.of(10));
+        Intake.getInstance().setVoltage(Constants.Intake.INTAKE_VOLTAGE);
         System.out.println("intaking");
     }
 
