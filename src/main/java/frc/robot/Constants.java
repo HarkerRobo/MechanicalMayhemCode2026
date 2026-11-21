@@ -277,6 +277,7 @@ public final class Constants
         public static final Voltage INTAKE_VOLTAGE = Volts.of(7.0);
         public static final Voltage INTAKE_REVERSE_VOLTAGE = Volts.of(-1.4);
         public static final Voltage INTAKE_REVERSE_VOLTAGE_HIGH = Volts.of(-3.0); //TODO
+        public static final Voltage INTAKE_REVERSE_VOLTAGE_MAX = Volts.of(-8.0);
 
         public static final int LEFT_ID = 17;
         public static final int RIGHT_ID = 19;

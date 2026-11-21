@@ -7,13 +7,17 @@ import frc.robot.Robot;
 import frc.robot.subsystems.Intake;
 import static edu.wpi.first.units.Units.*;
 
+import edu.wpi.first.units.measure.Voltage;
+
 public class StartReverseIntake extends Command 
 {
+    Voltage eject_volts;
     /**
      * Claims subsys.
      */
-    public StartReverseIntake() 
+    public StartReverseIntake(Voltage volts) 
     {
+        eject_volts = volts;
         addRequirements(Intake.getInstance());
     }
 
@@ -33,7 +37,7 @@ public class StartReverseIntake extends Command
         // else
         // {
         //Intake.getInstance().setVelocity(Constants.Intake.INTAKE_REVERSE_VELOCITY);
-        Intake.getInstance().setVoltage(Constants.Intake.INTAKE_REVERSE_VOLTAGE);
+        Intake.getInstance().setVoltage(eject_volts);
     }
 
 

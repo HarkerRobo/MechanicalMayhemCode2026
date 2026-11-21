@@ -86,7 +86,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("Zero Arm", new ZeroArm().withTimeout(3.0));
 
         NamedCommands.registerCommand("StartIntake", new StartRunIntake());
-        NamedCommands.registerCommand("ReverseIntake", new StartReverseIntake());
+        NamedCommands.registerCommand("ReverseIntake", new StartReverseIntake(Constants.Intake.INTAKE_REVERSE_VOLTAGE));
 
         stow = ()->
             new StartDefaultIntake()
@@ -159,12 +159,16 @@ public class RobotContainer {
             driver.leftTrigger().onFalse(stow.get());
 
             // Score
-            driver.rightTrigger().onTrue(new StartReverseIntake().withName("Score"));
+            driver.rightTrigger().onTrue(new StartReverseIntake(Constants.Intake.INTAKE_REVERSE_VOLTAGE).withName("Score"));
             driver.rightTrigger().onFalse(stow.get());
 
             //Powerful Score
-            driver.leftBumper().onTrue(new StartReverseIntakeHigh().withName("High Score"));
+            driver.leftBumper().onTrue(new StartReverseIntake(Constants.Intake.INTAKE_REVERSE_VOLTAGE_HIGH).withName("High Score"));
             driver.leftBumper().onFalse(stow.get());
+
+            //Force Eject
+            driver.button(8).onTrue(new StartReverseIntake(Constants.Intake.INTAKE_REVERSE_VOLTAGE_MAX).withName("Force Eject"));
+            driver.button(8).onFalse(stow.get());
 
             // Stow
             //driver.leftBumper().onTrue(new MoveToAngle(Constants.Arm.ZERO_ARM));
