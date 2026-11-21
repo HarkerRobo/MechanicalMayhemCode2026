@@ -176,7 +176,7 @@ public class RobotContainer {
              //                        .finallyDo(() -> stow.get().schedule()).withName("Intake Up Manual"));
             //driver.leftBumper().whileTrue(new ArmDown()
              //                          .finallyDo(() -> stow.get().schedule()).withName("Intake Down Manual"));
-            driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+            //driver.start().onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
             driver.x().whileTrue(drivetrain.applyRequest(() -> brake));
             driver.povLeft().onTrue(drivetrain.runOnce(() -> drivetrain.resetPose(
                              (DriverStation.getAlliance().get() == DriverStation.Alliance.Red) ? 
